@@ -45,6 +45,19 @@ template {
 a {
   background-color: transparent;
 }
+.a-comptable, .a-comptable:hover, .a-comptable:focus {
+  color: orange;
+}
+.nav > li > .a-comptable:hover {
+  background-color: #fff7e8;
+}
+.nav > .deconnexion {
+  background-color: transparent;
+  border-radius: 4px;
+}
+.nav > .deconnexion > a {
+  color: #337ab7;
+}
 a:active,
 a:hover {
   outline: 0;
@@ -4098,6 +4111,12 @@ select[multiple].input-group-sm > .input-group-btn > .btn {
 .nav-pills > li.active > a:focus {
   color: #fff;
   background-color: #337ab7;
+}
+.nav-pills > li.active-comptable > a,
+.nav-pills > li.active-comptable > a:hover,
+.nav-pills > li.active-comptable > a:focus {
+  color: #fff;
+  background-color: orange;
 }
 .nav-stacked > li {
   float: none;
