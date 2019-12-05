@@ -126,6 +126,41 @@ class PdoGsb
         return $requetePrepare->fetch();
     }
 
+    /** 
+     * Retourne le nom et prénom du visiteur
+     * 
+     * @param String $id Id du visiteur
+     * @return le nom et prénom du visiteur sous forme d'un tableau associatif comprenant
+     * comme clé nom et prenom contenant respectivement le nom et prénom du visiteur
+     */
+    public function getNomEtPrenomVisiteur($id)
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT visiteur.nom AS nom, visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+            . 'WHERE visiteur.id = :unId'
+        );
+        $requetePrepare->bindParam(':unId', $id, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        return $requetePrepare->fetch();
+    }
+
+    /**
+     * Retourne les informations de tous les visiteurs
+     * 
+     * @return l'id, le nom et le prénom sous la forme d'un tableau associatif
+     */
+    public function getLesVisiteurs()
+    {
+        $requetePrepare = PdoGsb::$monPdo->prepare(
+            'SELECT visiteur.id AS id, visiteur.nom AS nom, '
+            . 'visiteur.prenom AS prenom '
+            . 'FROM visiteur '
+        );
+        $requetePrepare->execute();
+        return $requetePrepare->fetchAll();
+    }
+
     /**
      * Retourne sous forme d'un tableau associatif toutes les lignes de frais
      * hors forfait concernées par les deux arguments.

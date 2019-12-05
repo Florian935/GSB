@@ -42,6 +42,10 @@ case 'etatFrais':
     include 'vues/v_entete.php';
     include 'controleurs/c_etatFrais.php';
     break;
+case 'validerFrais':
+    include 'vues/v_entete.php';
+    include 'controleurs/c_validerFrais.php';
+    break;
 case 'deconnexion':
     include 'controleurs/c_deconnexion.php';
     break;

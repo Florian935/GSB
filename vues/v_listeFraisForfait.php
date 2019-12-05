@@ -14,9 +14,11 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 ?>
-<div class="row">    
-    <h2>Renseigner ma fiche de frais du mois 
-        <?php echo $numMois . '-' . $numAnnee ?>
+<div class="row">
+    <h2>
+    <?php if ($typeUtilisateur == 'visiteur') { ?> Renseigner ma fiche de frais du mois 
+    <?php echo $numMois . '-' . $numAnnee; } else { ?> Valider la fiche de frais de 
+    <?php echo $nomEtPrenomVisiteur['nom'] . ' ' . $nomEtPrenomVisiteur['prenom']; } ?> 
     </h2>
     <h3>Eléments forfaitisés</h3>
     <div class="col-md-4">
@@ -40,8 +42,14 @@
                     <?php
                 }
                 ?>
-                <button class="btn btn-success" type="submit">Ajouter</button>
-                <button class="btn btn-danger" type="reset">Effacer</button>
+                <button class="btn btn-success" type="submit">
+                <?php if ($typeUtilisateur == 'visiteur') { ?> Ajouter
+                <?php } else { ?> Corriger <?php } ?>
+                </button>
+                <button class="btn btn-danger" type="reset">
+                <?php if ($typeUtilisateur == 'visiteur') { ?> Effacer
+                <?php } else { ?> Réinitialiser <?php } ?>
+                </button>
             </fieldset>
         </form>
     </div>
