@@ -12,6 +12,31 @@ html {
 body {
   margin: 0;
 }
+.choix-comptable {
+  display: flex;
+  flex-direction: row;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+.choix-fiche {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.label-visiteur {
+  Width: 130px;
+  margin-right: 5px;
+}
+.label-mois {
+  Width: 75px;
+  margin-right: 5px;
+}
+.choix-comptable > .choix-fiche > .form-control {
+  margin-right: 30px;
+}
+#lstVisiteur {
+  width: 200px;
+}
 article,
 aside,
 details,

@@ -16,7 +16,9 @@
 ?>
 <div id="accueil">
     <h2>
-        Gestion des frais<small> - Visiteur : 
+        Gestion des frais<small> - 
+        <?php if ($typeUtilisateur == 'visiteur') { ?> Visiteur : 
+        <?php } else { ?> Comptable : <?php } ?>
             <?php 
             echo $_SESSION['prenom'] . ' ' . $_SESSION['nom']
             ?></small>
@@ -34,14 +36,24 @@
             <div class="panel-body">
                 <div class="row">
                     <div class="col-xs-12 col-md-12">
+                        <?php if ($typeUtilisateur == 'visiteur') { ?>
                         <a href="index.php?uc=gererFrais&action=saisirFrais"
                            class="btn btn-success btn-lg" role="button">
+                        <?php } else { ?>
+                        <a href="index.php?uc=validerFrais&action=validationFrais"
+                           class="btn btn-success btn-lg" role="button">
+                        <?php } ?>
                             <span class="glyphicon glyphicon-pencil"></span>
-                            <br>Renseigner la fiche de frais</a>
+                            <br>
+                            <?php if ($typeUtilisateur == 'visiteur') { ?> Renseigner la fiche de frais 
+                            <?php } else { ?> Valider les fiches de frais <?php } ?></a>
                         <a href="index.php?uc=etatFrais&action=selectionnerMois"
                            class="btn btn-primary btn-lg" role="button">
                             <span class="glyphicon glyphicon-list-alt"></span>
-                            <br>Afficher mes fiches de frais</a>
+                            <br>
+                            <?php if ($typeUtilisateur == 'visiteur') { ?> Afficher mes fiches de frais
+                            <?php } else { ?> Suivre le paiement des fiches de frais <?php } ?></a>
+                            
                     </div>
                 </div>
             </div>

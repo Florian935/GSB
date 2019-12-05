@@ -56,7 +56,7 @@
                             </li>
                             <li 
                             <?php if (($uc == 'gererFrais') && $typeUtilisateur == 'visiteur') { ?> class="active"
-                            <?php } elseif (( $uc == 'gererFrais') && $typeUtilisateur == 'comptable') { ?>
+                            <?php } elseif (( $uc == 'validerFrais') && $typeUtilisateur == 'comptable') { ?>
                             class="active-comptable" 
                             <?php } elseif ($uc == 'deconnexion') { ?> class="deconnexion" <?php } ?>>
                                 <?php if ($typeUtilisateur == 'visiteur') { ?>
@@ -65,7 +65,7 @@
                                     Renseigner la fiche de frais
                                 </a> 
                                 <?php } else { ?>
-                                <a href="index.php?uc=gererFrais&action=saisirFrais"
+                                <a href="index.php?uc=validerFrais"
                                 <?php if ($typeUtilisateur == 'comptable') { ?>class="a-comptable" <?php } ?>>
                                     <span class="glyphicon glyphicon-ok"></span>
                                     Valider les fiches de frais
