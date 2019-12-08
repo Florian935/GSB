@@ -491,6 +491,34 @@ class PdoGsb
     }
 
     /**
+     * Retourne les mois depuis septembre 2016 jusqu'à la date actuelle
+     * @return un tableau associatif de clé un mois -aaaamm- et de valeurs
+     *         l'année et le mois correspondant jusqu'au mois actuel
+     */
+    public function getTousLesMois() 
+    {
+        $dateActuelle = date('Ym');
+        $annee = substr($dateActuelle, 0, 4);
+        $numMois = array('01', '02', '03', '04', '05', 
+        '06', '07', '08', '09', '10', '11', '12');
+        $lesMois = array();
+        for ($a = $annee; $a >= 2016; $a--) {
+            for ($m = count($numMois)-1; $m >= 0; $m--) {
+                $lesMois[] = array(
+                    'mois' => $a . $numMois[$m],
+                    'numAnnee' => $a,
+                    'numMois' => $numMois[$m]
+                );
+                if ($a == '2016' && $m == 8) {
+                    $a = 2015;
+                    $m = -1;
+                }
+            }
+        }
+        return $lesMois;
+    }
+
+    /**
      * Retourne les informations d'une fiche de frais d'un visiteur pour un
      * mois donné
      *
