@@ -16,16 +16,9 @@
 
 $idVisiteur = $_SESSION['idUtilisateur'];
 $mois = getMois(date('d/m/Y'));
-/* Afin de pouvoir pré-remplir le combo avec une liste des mois, on génère les 
-* mois disponibles pour un visiteur choisi au hasard.
-*/
 $idVisiteurSelectionne = filter_input(INPUT_POST, 'lstVisiteur', FILTER_SANITIZE_STRING);
 $moisFicheSelectionne = filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_STRING);
-if ($moisFicheSelectionne == false || $moisFicheSelectionne == null) {
-    $lesMois = $pdo->getLesMoisDisponibles('a17');
-} else {
-    $lesMois = $pdo->getLesMoisDisponibles($idVisiteurSelectionne);
-}
+$lesMois = $pdo->getTousLesMois();
 $lesVisiteurs = $pdo->getLesVisiteurs();
 $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($idVisiteurSelectionne);
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
@@ -45,7 +38,10 @@ case 'afficherFrais':
         include 'vues/v_listeFraisForfait.php';
         include 'vues/v_listeFraisHorsForfait.php';
     } else {
-        ajouterErreur('Pas de fiche de frais pour ce visiteur ce mois, veuillez en choisir une autre.');
+        ajouterErreur(
+            'Pas de fiche de frais pour ce visiteur ce mois,
+             veuillez en choisir une autre.'
+        );
         include 'vues/v_erreurs.php';
     }
     break;

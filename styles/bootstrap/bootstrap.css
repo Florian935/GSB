@@ -12,7 +12,7 @@ html {
 body {
   margin: 0;
 }
-.choix-comptable {
+.choix-comptable, .form-justificatif {
   display: flex;
   flex-direction: row;
   margin-top: 40px;
@@ -34,8 +34,26 @@ body {
 .choix-comptable > .choix-fiche > .form-control {
   margin-right: 30px;
 }
+.choix-justificatif {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.label-justificatif {
+  width: 170px;
+}
+#nb-justificatif {
+  width: 50px;
+  margin-right: 30px;
+}
 #lstVisiteur {
   width: 200px;
+}
+#form-control-comptable {
+  width: 200px;
+}
+#td-utilisateur {
+  width: 300px;
 }
 article,
 aside,
