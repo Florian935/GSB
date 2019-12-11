@@ -571,4 +571,42 @@ class PdoGsb
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
+
+    /** 
+     * Met à jour un frais hors forfait pour un visiteur et un mois donné
+     * à partir des informations fournies en paramètre 
+     * 
+     * @param String $idFraisHorsForfait ID du frais hors forfait
+     * @param String $idVisiteur         ID du visiteur
+     * @param String $mois               Mois sous la forme aaaamm
+     * @param String $libelle            Libellé du frais
+     * @param String $date               Date du frais au format français jj//mm/aaaa
+     * @param Float  $montant            Montant du frais
+     * 
+     * @return null
+     */
+    public function majFraisHorsForfait(
+        $idFraisHorsForfait,
+        $idVisiteur,
+        $mois,
+        $libelle,
+        $date,
+        $montant
+    ) {
+        $dateFr = dateFrancaisVersAnglais($date);
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'UPDATE lignefraishorsforfait '
+            . 'SET libelle = :unLibelle, date = :uneDate, '
+            . 'montant = :unMontant '
+            . 'WHERE id = :unId AND idVisiteur = :unIdVisiteur AND '
+            . 'mois = :unMois'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unLibelle', $libelle, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':uneDate', $dateFr, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMontant', $montant, PDO::PARAM_INT);
+        $requetePrepare->bindParam(':unId', $idFraisHorsForfait, PDO::PARAM_INT);
+        $requetePrepare->execute();
+    }
 }

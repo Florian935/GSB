@@ -19,6 +19,15 @@ $mois = getMois(date('d/m/Y'));
 $numAnnee = substr($mois, 0, 4);
 $numMois = substr($mois, 4, 2);
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
+if ($typeUtilisateur == 'comptable') {
+    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($_SESSION['idVisiteurSelectionne']);
+} else {
+    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($idVisiteur);
+}
+
+$lesVisiteurs = $pdo->getLesVisiteurs();
+$lesMois = $pdo->getTousLesMois();
+require 'vues/v_listeVisiteur.php';
 switch ($action) {
 case 'saisirFrais':
     if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
@@ -28,11 +37,17 @@ case 'saisirFrais':
 case 'validerMajFraisForfait':
     $lesFrais = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
     if (lesQteFraisValides($lesFrais)) {
-        $pdo->majFraisForfait($idVisiteur, $mois, $lesFrais);
+        if ($typeUtilisateur == 'comptable') {
+            $pdo->majFraisForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne'], $lesFrais);
+        } else {
+            $pdo->majFraisForfait($idVisiteur, $mois, $lesFrais);
+        }
+        
     } else {
         ajouterErreur('Les valeurs des frais doivent être numériques');
         include 'vues/v_erreurs.php';
     }
+    $estMajFraisForfait = true;
     break;
 case 'validerCreationFrais':
     $dateFrais = filter_input(INPUT_POST, 'dateFrais', FILTER_SANITIZE_STRING);
@@ -56,7 +71,13 @@ case 'supprimerFrais':
     $pdo->supprimerFraisHorsForfait($idFrais);
     break;
 }
-$lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $mois);
-$lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $mois);
+if ($typeUtilisateur == 'comptable') {
+    $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne']);
+    $lesFraisForfait = $pdo->getLesFraisForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne']);
+} else {
+    $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $mois);
+    $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $mois);
+}
+
 require 'vues/v_listeFraisForfait.php';
 require 'vues/v_listeFraisHorsForfait.php';

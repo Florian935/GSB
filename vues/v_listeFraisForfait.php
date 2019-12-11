@@ -18,19 +18,24 @@
     <h2>
     <?php if ($typeUtilisateur == 'visiteur') { ?> Renseigner ma fiche de frais du mois 
     <?php echo $numMois . '-' . $numAnnee; } else { ?> Valider la fiche de frais de 
-    <?php echo $nomEtPrenomVisiteur['nom'] . ' ' . $nomEtPrenomVisiteur['prenom']; } ?> 
+    <?php echo htmlspecialchars($nomEtPrenomVisiteur['nom']) . ' '
+               . htmlspecialchars($nomEtPrenomVisiteur['prenom']); } ?> 
     </h2>
     <h3>Eléments forfaitisés</h3>
+    <?php if (isset($estMajFraisForfait) && $estMajFraisForfait) { ?>
+        <p>Les Modifications ont été prises en compte.</p>
+    <?php } ?>
     <div class="col-md-4">
         <form method="post" 
               action="index.php?uc=gererFrais&action=validerMajFraisForfait" 
-              role="form">
+              role="form"
+              class="form-group">
             <fieldset>       
                 <?php
                 foreach ($lesFraisForfait as $unFrais) {
-                    $idFrais = $unFrais['idfrais'];
+                    $idFrais = htmlspecialchars($unFrais['idfrais']);
                     $libelle = htmlspecialchars($unFrais['libelle']);
-                    $quantite = $unFrais['quantite']; ?>
+                    $quantite = htmlspecialchars($unFrais['quantite']); ?>
                     <div class="form-group">
                         <label for="idFrais"><?php echo $libelle ?></label>
                         <input type="text" id="idFrais" 

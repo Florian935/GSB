@@ -67,6 +67,21 @@ function deconnecter()
 }
 
 /**
+ * Stocke dans une variable de session l'id du visiteur et le mois de la fiche 
+ * qui ont été selectionné par le comptable.
+ * 
+ * @param String $idVisiteurSelectionne id du visiteur selectionne
+ * @param Date   $mois moisSelectionne selectionné sous la forme aaaamm
+ * 
+ * @return null
+ */
+function setIdVisiteurEtMoisSelectionnes($idVisiteurSelectionne, $moisSelectionne) 
+{
+    $_SESSION['idVisiteurSelectionne'] = $idVisiteurSelectionne;
+    $_SESSION['moisSelectionne'] = $moisSelectionne;
+}
+
+/**
  * Transforme une date au format français jj/mm/aaaa vers le format anglais
  * aaaa-mm-jj
  *
