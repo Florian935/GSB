@@ -22,10 +22,10 @@ if ($typeUtilisateur == 'comptable') { ?>
             <select id="lstVisiteur" name="lstVisiteur" class="form-control">
             <?php 
                     foreach ($lesVisiteurs as $unVisiteur) { 
-                        $id = $unVisiteur['id'];
-                        $nom = $unVisiteur['nom'];
-                        $prenom = $unVisiteur['prenom'];
-                        if ($id == $idVisiteurSelectionne) {
+                        $id = htmlspecialchars($unVisiteur['id']);
+                        $nom = htmlspecialchars($unVisiteur['nom']);
+                        $prenom = htmlspecialchars($unVisiteur['prenom']);
+                        if ($id == $_SESSION['idVisiteurSelectionne']) {
                             ?>
                             <option selected value = "<?php echo $id ?>">
                                 <?php echo $nom . ' ' . $prenom ?> </option>
@@ -48,7 +48,7 @@ if ($typeUtilisateur == 'comptable') { ?>
                         $mois = $unMois['mois'];
                         $numAnnee = $unMois['numAnnee'];
                         $numMois = $unMois['numMois'];
-                        if ($mois == $moisFicheSelectionne) {
+                        if ($mois == $_SESSION['moisSelectionne']) {
                             ?>
                             <option selected value="<?php echo $mois ?>">
                                 <?php echo $numMois . '/' . $numAnnee ?> </option>
@@ -65,5 +65,5 @@ if ($typeUtilisateur == 'comptable') { ?>
         </div>
         <input id="ok" type="submit" value="Valider" class="btn btn-success" 
                    role="button">
-        </form>
-    <?php } ?>
+    </form>
+<?php } ?>
