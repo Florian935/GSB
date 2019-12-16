@@ -131,7 +131,7 @@
 </div>
 <?php 
 } if ($typeUtilisateur == 'comptable') { ?>
-    <form action="index.php?uc=validerFrais&action=A REMPLIR !!!" 
+    <form action="index.php?uc=validerFrais&action=validerNbJustificatifs" 
           method="post" role="form" class="form-justificatif">
         <div class="choix-justificatif">
             <label class="label-justificatif" for="nb-justificatif">Nombre de justificatifs : </label>

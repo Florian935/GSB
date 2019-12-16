@@ -549,6 +549,34 @@ class PdoGsb
     }
 
     /**
+     * Permet de modifier le nombres de justificatifs d'une fiche de frais
+     * pour un visiteur et un mois donné
+     * 
+     * @param String $idVisiteur       ID du visiteur
+     * @param String $mois             Mois sous la forme aaaamm
+     * @param Integer $nbJustificatifs Nombre de justificatifs 
+     * 
+     * @return null
+     */
+    public function setNbJustificatifs($idVisiteur, $mois, $nbJustificatifs) 
+    {
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'UPDATE fichefrais '
+            . 'SET nbjustificatifs = :nbJustificatifs '
+            . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
+            . 'AND mois = :unMois'
+        );
+        $requetePrepare->bindParam(
+            ':nbJustificatifs', 
+            $nbJustificatifs, 
+            PDO::PARAM_INT
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
+        $requetePrepare->execute();
+    }
+
+    /**
      * Modifie l'état et la date de modification d'une fiche de frais.
      * Modifie le champ idEtat et met la date de modif à aujourd'hui.
      *
