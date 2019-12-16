@@ -100,8 +100,7 @@
         </table>
     </div>
 </div>
-<?php 
-if ($typeUtilisateur == 'visiteur') { ?>
+<?php if ($typeUtilisateur == 'visiteur') { ?>
 <div class="row">
     <h3>Nouvel élément hors forfait</h3>
     <div class="col-md-4">
@@ -130,10 +129,6 @@ if ($typeUtilisateur == 'visiteur') { ?>
         </form>
     </div>
 </div>
-<?php } ?>
-<?php 
-if (isset($estMajFraisHorsForfait) && $estMajFraisHorsForfait && $typeUtilisateur == 'visiteur') { ?>
-    <p>Les Modifications ont été prises en compte.</p>
 <?php 
 } if ($typeUtilisateur == 'comptable') { ?>
     <form action="index.php?uc=validerFrais&action=A REMPLIR !!!" 
