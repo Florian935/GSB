@@ -20,7 +20,9 @@ $numAnnee = substr($mois, 0, 4);
 $numMois = substr($mois, 4, 2);
 $action = filter_input(INPUT_GET, 'action', FILTER_SANITIZE_STRING);
 if ($typeUtilisateur == 'comptable') {
-    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($_SESSION['idVisiteurSelectionne']);
+    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
+        $_SESSION['idVisiteurSelectionne']
+    );
 } else {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($idVisiteur);
 }
@@ -35,10 +37,18 @@ case 'saisirFrais':
     }
     break;
 case 'validerMajFraisForfait':
-    $lesFrais = filter_input(INPUT_POST, 'lesFrais', FILTER_DEFAULT, FILTER_FORCE_ARRAY);
+    $lesFrais = filter_input(
+        INPUT_POST, 'lesFrais', 
+        FILTER_DEFAULT, 
+        FILTER_FORCE_ARRAY
+    );
     if (lesQteFraisValides($lesFrais)) {
         if ($typeUtilisateur == 'comptable') {
-            $pdo->majFraisForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne'], $lesFrais);
+            $pdo->majFraisForfait(
+                $_SESSION['idVisiteurSelectionne'], 
+                $_SESSION['moisSelectionne'], 
+                $lesFrais
+            );
         } else {
             $pdo->majFraisForfait($idVisiteur, $mois, $lesFrais);
         }
@@ -65,15 +75,23 @@ case 'validerCreationFrais':
             $montant
         );
     }
+    $estMajFraisHorsForfait = true;
     break;
 case 'supprimerFrais':
     $idFrais = filter_input(INPUT_GET, 'idFrais', FILTER_SANITIZE_STRING);
     $pdo->supprimerFraisHorsForfait($idFrais);
+    $FraisHorsForfaitSupprime = true;
     break;
 }
 if ($typeUtilisateur == 'comptable') {
-    $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne']);
-    $lesFraisForfait = $pdo->getLesFraisForfait($_SESSION['idVisiteurSelectionne'], $_SESSION['moisSelectionne']);
+    $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait(
+        $_SESSION['idVisiteurSelectionne'], 
+        $_SESSION['moisSelectionne']
+    );
+    $lesFraisForfait = $pdo->getLesFraisForfait(
+        $_SESSION['idVisiteurSelectionne'], 
+        $_SESSION['moisSelectionne']
+    );
 } else {
     $lesFraisHorsForfait = $pdo->getLesFraisHorsForfait($idVisiteur, $mois);
     $lesFraisForfait = $pdo->getLesFraisForfait($idVisiteur, $mois);
