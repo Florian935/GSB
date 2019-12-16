@@ -56,7 +56,7 @@
                             </li>
                             <li 
                             <?php if (($uc == 'gererFrais') && $typeUtilisateur == 'visiteur') { ?> class="active"
-                            <?php } elseif (( $uc == 'validerFrais') && $typeUtilisateur == 'comptable') { ?>
+                            <?php } elseif (( $uc == 'validerFrais' || $uc == 'gererFrais') && $typeUtilisateur == 'comptable') { ?>
                             class="active-comptable" 
                             <?php } elseif ($uc == 'deconnexion') { ?> class="deconnexion" <?php } ?>>
                                 <?php if ($typeUtilisateur == 'visiteur') { ?>

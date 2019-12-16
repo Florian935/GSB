@@ -25,7 +25,7 @@ if ($typeUtilisateur == 'comptable') { ?>
                         $id = htmlspecialchars($unVisiteur['id']);
                         $nom = htmlspecialchars($unVisiteur['nom']);
                         $prenom = htmlspecialchars($unVisiteur['prenom']);
-                        if ($id == $_SESSION['idVisiteurSelectionne']) {
+                        if (isset($idVisiteurSelectionne) && $id == $idVisiteurSelectionne) {
                             ?>
                             <option selected value = "<?php echo $id ?>">
                                 <?php echo $nom . ' ' . $prenom ?> </option>
@@ -48,7 +48,7 @@ if ($typeUtilisateur == 'comptable') { ?>
                         $mois = $unMois['mois'];
                         $numAnnee = $unMois['numAnnee'];
                         $numMois = $unMois['numMois'];
-                        if ($mois == $_SESSION['moisSelectionne']) {
+                        if (isset($moisFicheSelectionne) && $mois == $moisFicheSelectionne) {
                             ?>
                             <option selected value="<?php echo $mois ?>">
                                 <?php echo $numMois . '/' . $numAnnee ?> </option>

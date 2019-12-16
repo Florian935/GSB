@@ -15,9 +15,11 @@
  */
 ?>
 <hr>
-<?php if (isset($estMajFraisHorsForfait) && $estMajFraisHorsForfait) { ?>
+<?php if ((isset($estMajFraisHorsForfait) && $estMajFraisHorsForfait) 
+    || (isset($FraisHorsForfaitSupprime) && $FraisHorsForfaitSupprime)
+) { ?>
         <p>Les Modifications ont été prises en compte.</p>
-    <?php } ?>
+<?php } ?>
 <div class="row">
     
     <div class="panel panel-info">
@@ -37,7 +39,9 @@
                 $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
                 $date = htmlspecialchars($unFraisHorsForfait['date']);
                 $montant = htmlspecialchars($unFraisHorsForfait['montant']);
-                $idFraisHorsForfait = htmlspecialchars($unFraisHorsForfait['id']); ?>     
+                $idFraisHorsForfait = htmlspecialchars(
+                    $unFraisHorsForfait['id']
+                ); ?>     
 
                 <?php 
                 if ($typeUtilisateur == 'visiteur') { ?>
@@ -60,7 +64,7 @@
                                    class="form-control" id="text"
                                    value="<?php echo $date?>">
                             </td>
-                            <td id="td-utilisateur"> 
+                            <td id="td-utilisateur">
                             <input type="text" 
                                    id="form-control-comptable" 
                                    name="libelle-corrige" 
@@ -96,8 +100,7 @@
         </table>
     </div>
 </div>
-<?php 
-if ($typeUtilisateur == 'visiteur') { ?>
+<?php if ($typeUtilisateur == 'visiteur') { ?>
 <div class="row">
     <h3>Nouvel élément hors forfait</h3>
     <div class="col-md-4">
@@ -126,9 +129,8 @@ if ($typeUtilisateur == 'visiteur') { ?>
         </form>
     </div>
 </div>
-<?php } ?>
-<?php
-if ($typeUtilisateur == 'comptable') { ?>
+<?php 
+} if ($typeUtilisateur == 'comptable') { ?>
     <form action="index.php?uc=validerFrais&action=A REMPLIR !!!" 
           method="post" role="form" class="form-justificatif">
         <div class="choix-justificatif">
