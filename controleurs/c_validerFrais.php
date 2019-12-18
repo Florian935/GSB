@@ -16,6 +16,7 @@
 
 
 $ficheExistante = false;
+$idComptable = $_SESSION['idUtilisateur'];
 /*
 * On récupère l'id du visiteur selectionné et le mois de la fiche selectionnée.
 * On stocke l'id et le mois dans une variable de session afin que ces 2 variables
@@ -184,13 +185,16 @@ case 'validerNbJustificatifs':
         'nbJustificatif', 
         FILTER_VALIDATE_FLOAT
     );
-    $pdo->setNbJustificatifs(
+    $pdo->majNbJustificatifs(
         $idVisiteurSelectionne, 
         $moisFicheSelectionne, 
         $nbJustificatifs
     );
     $estMajFraisHorsForfait = true;
     $ficheExistante = true;
+    break;
+case 'validerFiche':
+    $pdo->validerLaFiche($idVisiteurSelectionne, $idComptable, $moisFicheSelectionne);
     break;
 }
 

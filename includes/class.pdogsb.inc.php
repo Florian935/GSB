@@ -301,7 +301,7 @@ class PdoGsb
      */
     public function majNbJustificatifs($idVisiteur, $mois, $nbJustificatifs)
     {
-        $requetePrepare = PdoGB::$monPdo->prepare(
+        $requetePrepare = PdoGSB::$monPdo->prepare(
             'UPDATE fichefrais '
             . 'SET nbjustificatifs = :unNbJustificatifs '
             . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
@@ -549,34 +549,6 @@ class PdoGsb
     }
 
     /**
-     * Permet de modifier le nombres de justificatifs d'une fiche de frais
-     * pour un visiteur et un mois donné
-     * 
-     * @param String $idVisiteur       ID du visiteur
-     * @param String $mois             Mois sous la forme aaaamm
-     * @param Integer $nbJustificatifs Nombre de justificatifs 
-     * 
-     * @return null
-     */
-    public function setNbJustificatifs($idVisiteur, $mois, $nbJustificatifs) 
-    {
-        $requetePrepare = PdoGSB::$monPdo->prepare(
-            'UPDATE fichefrais '
-            . 'SET nbjustificatifs = :nbJustificatifs '
-            . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
-            . 'AND mois = :unMois'
-        );
-        $requetePrepare->bindParam(
-            ':nbJustificatifs', 
-            $nbJustificatifs, 
-            PDO::PARAM_INT
-        );
-        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
-        $requetePrepare->execute();
-    }
-
-    /**
      * Modifie l'état et la date de modification d'une fiche de frais.
      * Modifie le champ idEtat et met la date de modif à aujourd'hui.
      *
@@ -635,6 +607,33 @@ class PdoGsb
         $requetePrepare->bindParam(':uneDate', $dateFr, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMontant', $montant, PDO::PARAM_INT);
         $requetePrepare->bindParam(':unId', $idFraisHorsForfait, PDO::PARAM_INT);
+        $requetePrepare->execute();
+    }
+
+    /**
+     * Permet de valider la fiche pour un visiteur donné et un mois donné
+     * en modifiant la date de modification de la fiche à celle du jour actuel et
+     * en affectant le comptable qui a effectué la validation à la fiche
+     * 
+     * @param String $idVisiteur  ID du visiteur
+     * @param String $idComptable ID du comptable
+     * @param String $mois        Mois sous la forme aaaamm
+     * 
+     * @return null
+     */
+    public function validerLaFiche($idVisiteur, $idComptable, $mois) 
+    {
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'UPDATE fichefrais '
+            . 'SET idcomptable = :unIdComptable, '
+            . "idetat = 'VA', "
+            . 'datemodif = now() '
+            . 'WHERE idvisiteur = :unIdVisiteur AND '
+            . 'mois = :unMois'
+        );
+        $requetePrepare->bindParam(':unIdComptable', $idComptable, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
     }
 }

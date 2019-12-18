@@ -18,7 +18,7 @@
 <?php if ((isset($estMajFraisHorsForfait) && $estMajFraisHorsForfait) 
     || (isset($FraisHorsForfaitSupprime) && $FraisHorsForfaitSupprime)
 ) { ?>
-        <p>Les Modifications ont été prises en compte.</p>
+        <p class="alert alert-success">Les Modifications ont été prises en compte.</p>
 <?php } ?>
 <div class="row">
     
@@ -140,8 +140,11 @@
                 size="10" maxlength="5" 
                 value="" 
                 class="form-control">
-            <button class="btn btn-success" type="submit">Valider</button>
+            <button class="btn btn-success" type="submit">Valider les justificatifs</button>
         </div>
     </form>
-    <a class="btn btn-success" href="index.php?uc=validerFrais&action=A REMPLIR !!!">Valider la fiche</a> 
+    <form action="index.php?uc=validerFrais&action=validerFiche" 
+          method="post" role="form" class="form-group">
+          <button class="btn btn-success" type="submit">Valider la fiche</button>
+    </form>
 <?php } ?>
