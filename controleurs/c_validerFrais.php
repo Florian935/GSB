@@ -16,6 +16,8 @@
 
 
 $ficheExistante = false;
+$estFicheValidee = false;
+$idComptable = $_SESSION['idUtilisateur'];
 /*
 * On récupère l'id du visiteur selectionné et le mois de la fiche selectionnée.
 * On stocke l'id et le mois dans une variable de session afin que ces 2 variables
@@ -41,7 +43,6 @@ if (filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_STRING)) {
         FILTER_SANITIZE_STRING
     );
 }
-
 if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
     
     setIdVisiteurEtMoisSelectionnes($idVisiteurSelectionne, $moisFicheSelectionne);
@@ -51,14 +52,10 @@ if (isset($_SESSION['idVisiteurSelectionne']) && isset($_SESSION['moisSelectionn
     $moisFicheSelectionne = $_SESSION['moisSelectionne'];
 }
 
-
 $lesMois = $pdo->getTousLesMois();
 $lesVisiteurs = $pdo->getLesVisiteurs();
 
-/* On récupère l'id du frais hors forfait à corriger, reporter ou refuser
- * et on indique l'action et le traitement à effectuer en récupérant l'attribut 
- * "name" du bouton sur lequel le comptable a cliqué
-*/
+// On récupère l'id du frais hors forfait à corriger, reporter ou refuser
 $idFraisHorsForfaitACorriger = filter_input(
     INPUT_POST, 'corriger',
     FILTER_SANITIZE_STRING
@@ -71,18 +68,24 @@ $idFraisHorsForfaitARefuser = filter_input(
     INPUT_POST, 'refuser',
     FILTER_SANITIZE_STRING
 );
-if ($idFraisHorsForfaitACorriger != null
-    || $idFraisHorsForfaitAReporter != null
-    || $idFraisHorsForfaitARefuser != null
+/*
+ * Si une des variables est initialisées, c'est qu'on
+ * doit soit corriger, reporter ou refuser un frais.
+ * On valorise la variable $traitementAEffectuer pour
+ * savoir quel traitement sera à effectuer sur le frais.
+ * */
+if (isset($idFraisHorsForfaitACorriger)
+    || isset($idFraisHorsForfaitAReporter)
+    || isset($idFraisHorsForfaitARefuser)
 ) {
     $action = 'modification';       
-    if ($idFraisHorsForfaitACorriger != null) {
+    if (isset($idFraisHorsForfaitACorriger)) {
         $traitementAEffectuer = 'corriger';
         $idFraisHorsForfait = $idFraisHorsForfaitACorriger;
-    } elseif ($idFraisHorsForfaitAReporter != null) {
+    } elseif (isset($idFraisHorsForfaitAReporter)) {
         $traitementAEffectuer = 'reporter';
         $idFraisHorsForfait = $idFraisHorsForfaitAReporter;
-    } elseif ($idFraisHorsForfaitARefuser != null) {
+    } elseif (isset($idFraisHorsForfaitARefuser)) {
         $traitementAEffectuer = 'refuser';
         $idFraisHorsForfait = $idFraisHorsForfaitARefuser;
     }
@@ -92,9 +95,6 @@ if ($idFraisHorsForfaitACorriger != null
 require 'vues/v_listeVisiteur.php';
 switch($action) {
 case 'afficherFrais':
-    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
-        $idVisiteurSelectionne
-    );
     $lesMoisDuVisiteur = $pdo->getLesMoisDisponibles($idVisiteurSelectionne);
     foreach ($lesMoisDuVisiteur as $unMois) {
         if ($moisFicheSelectionne == $unMois['mois']) {
@@ -132,27 +132,10 @@ case 'modification':
             $libelleFrais = 'REFUSE ' . $libelleFrais;
         }
     }
-    /* Si le frais est à reporter, on doit vérifier que la fiche
-     * dans laquelle on reporte le frais est bien créée. Si ce n'est
-     * pas le cas, on la créée. On supprime le frais de la fiche
-     * actuelle.
-    */
-    if ($traitementAEffectuer == 'reporter') {
-        $mois = getMois(date('d/m/Y'));
-        if ($pdo->estPremierFraisMois($idVisiteurSelectionne, $mois)) {
-            $pdo->creeNouvellesLignesFrais(
-                $idVisiteurSelectionne, 
-                $mois
-            );
-        }
-        $pdo->supprimerFraisHorsForfait($idFraisHorsForfait);
-    }
-    $moisFicheCree = $pdo->dernierMoisSaisi($idVisiteurSelectionne);
+    
     valideInfosFrais($dateFrais, $libelleFrais, $montantFrais);
     if (nbErreurs() != 0) {
-        include 'vues/v_listeFraisForfait.php';
         include 'vues/v_erreurs.php';
-        include 'vues/v_listeFraisHorsForfait.php';
     } else {
         if ($traitementAEffectuer == 'corriger' 
             || $traitementAEffectuer == 'refuser'
@@ -165,10 +148,24 @@ case 'modification':
                 $dateFrais,
                 $montantFrais
             );
+            /* Si le frais est à reporter, on doit vérifier que la fiche
+            * dans laquelle on reporte le frais est bien créée. Si ce n'est
+            * pas le cas, on la créée puis on reporte le frais. On supprime également
+             le frais de la fiche actuelle.
+            */
         } elseif ($traitementAEffectuer == 'reporter') {
+            $mois = getMois(date('d/m/Y'));
+            if ($pdo->estPremierFraisMois($idVisiteurSelectionne, $mois)) {
+                    $pdo->creeNouvellesLignesFrais(
+                        $idVisiteurSelectionne, 
+                        $mois
+                    );
+            }
+            $dernierMoisVisiteur = $pdo->dernierMoisSaisi($idVisiteurSelectionne);
+            $pdo->supprimerFraisHorsForfait($idFraisHorsForfait);
             $pdo->creeNouveauFraisHorsForfait(
                 $idVisiteurSelectionne,
-                $moisFicheCree,
+                $dernierMoisVisiteur,
                 $libelleFrais,
                 $dateFrais,
                 $montantFrais
@@ -177,6 +174,37 @@ case 'modification':
         $estMajFraisHorsForfait = true;
         $ficheExistante = true;
     }
+    break;
+case 'validerNbJustificatifs':
+    $nbJustificatifs = (int)filter_input(
+        INPUT_POST, 
+        'nbJustificatif', 
+        FILTER_VALIDATE_FLOAT
+    );
+    $pdo->majNbJustificatifs(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne, 
+        $nbJustificatifs
+    );
+    $estMajFraisHorsForfait = true;
+    $ficheExistante = true;
+    break;
+case 'validerFiche':
+    $pdo->validerLaFiche(
+        $idVisiteurSelectionne, 
+        $idComptable, 
+        $moisFicheSelectionne
+    );
+    $montantValide = $pdo->getMontantValideHorsFraisRefuses(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
+    $pdo->majMontantValide(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne, 
+        $montantValide
+    );
+    $estFicheValidee = true;
     break;
 }
 
@@ -199,5 +227,14 @@ if ($ficheExistante) {
     );
     include 'vues/v_listeFraisForfait.php';
     include 'vues/v_listeFraisHorsForfait.php';
+} 
+if ($estFicheValidee) {
+    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
+        $idVisiteurSelectionne
+    );
+    $annee = substr($moisFicheSelectionne, 0, 4);
+    $mois = substr($moisFicheSelectionne, 4, 2);
+    $moisAnnee = $mois . '/' . $annee;
+    include 'vues/v_listeVisiteur.php';
 }
 

@@ -23,7 +23,7 @@
     </h2>
     <h3>Eléments forfaitisés</h3>
     <?php if (isset($estMajFraisForfait) && $estMajFraisForfait) { ?>
-        <p>Les Modifications ont été prises en compte.</p>
+        <p class="alert alert-success">Les Modifications ont été prises en compte.</p>
     <?php } ?>
     <div class="col-md-4">
         <form method="post" 
