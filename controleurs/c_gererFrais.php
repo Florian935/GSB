@@ -13,7 +13,7 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
+$estFicheValidee = false;
 $idVisiteur = $_SESSION['idUtilisateur'];
 $mois = getMois(date('d/m/Y'));
 $numAnnee = substr($mois, 0, 4);

@@ -16,6 +16,7 @@
 
 
 $ficheExistante = false;
+$estFicheValidee = false;
 $idComptable = $_SESSION['idUtilisateur'];
 /*
 * On récupère l'id du visiteur selectionné et le mois de la fiche selectionnée.
@@ -42,7 +43,6 @@ if (filter_input(INPUT_POST, 'lstMois', FILTER_SANITIZE_STRING)) {
         FILTER_SANITIZE_STRING
     );
 }
-
 if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
     
     setIdVisiteurEtMoisSelectionnes($idVisiteurSelectionne, $moisFicheSelectionne);
@@ -51,7 +51,6 @@ if (isset($_SESSION['idVisiteurSelectionne']) && isset($_SESSION['moisSelectionn
     $idVisiteurSelectionne = $_SESSION['idVisiteurSelectionne'];
     $moisFicheSelectionne = $_SESSION['moisSelectionne'];
 }
-
 
 $lesMois = $pdo->getTousLesMois();
 $lesVisiteurs = $pdo->getLesVisiteurs();
@@ -96,9 +95,6 @@ if (isset($idFraisHorsForfaitACorriger)
 require 'vues/v_listeVisiteur.php';
 switch($action) {
 case 'afficherFrais':
-    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
-        $idVisiteurSelectionne
-    );
     $lesMoisDuVisiteur = $pdo->getLesMoisDisponibles($idVisiteurSelectionne);
     foreach ($lesMoisDuVisiteur as $unMois) {
         if ($moisFicheSelectionne == $unMois['mois']) {
@@ -194,7 +190,21 @@ case 'validerNbJustificatifs':
     $ficheExistante = true;
     break;
 case 'validerFiche':
-    $pdo->validerLaFiche($idVisiteurSelectionne, $idComptable, $moisFicheSelectionne);
+    $pdo->validerLaFiche(
+        $idVisiteurSelectionne, 
+        $idComptable, 
+        $moisFicheSelectionne
+    );
+    $montantValide = $pdo->getMontantValideHorsFraisRefuses(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
+    $pdo->majMontantValide(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne, 
+        $montantValide
+    );
+    $estFicheValidee = true;
     break;
 }
 
@@ -217,5 +227,14 @@ if ($ficheExistante) {
     );
     include 'vues/v_listeFraisForfait.php';
     include 'vues/v_listeFraisHorsForfait.php';
+} 
+if ($estFicheValidee) {
+    $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
+        $idVisiteurSelectionne
+    );
+    $annee = substr($moisFicheSelectionne, 0, 4);
+    $mois = substr($moisFicheSelectionne, 4, 2);
+    $moisAnnee = $mois . '/' . $annee;
+    include 'vues/v_listeVisiteur.php';
 }
 

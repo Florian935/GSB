@@ -138,13 +138,14 @@
             <input type="text" id="nb-justificatif" 
                 name="nbJustificatif"
                 size="10" maxlength="5" 
-                value="" 
+                value="0" 
                 class="form-control">
             <button class="btn btn-success" type="submit">Valider les justificatifs</button>
         </div>
     </form>
     <form action="index.php?uc=validerFrais&action=validerFiche" 
           method="post" role="form" class="form-group">
-          <button class="btn btn-success" type="submit">Valider la fiche</button>
+          <button class="btn btn-success" type="submit" 
+          onclick="return confirm('Avez-vous pensé à renseigner le nombre de justificatifs ?');">Valider la fiche</button>
     </form>
 <?php } ?>

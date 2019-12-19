@@ -13,7 +13,7 @@
  * @version   GIT: <0>
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
-
+if (!$estFicheValidee) {
 if ($typeUtilisateur == 'comptable') { ?>
     <form action="index.php?uc=validerFrais&action=afficherFrais" 
               method="post" role="form" class="choix-comptable">
@@ -25,7 +25,7 @@ if ($typeUtilisateur == 'comptable') { ?>
                         $id = htmlspecialchars($unVisiteur['id']);
                         $nom = htmlspecialchars($unVisiteur['nom']);
                         $prenom = htmlspecialchars($unVisiteur['prenom']);
-                        if (isset($idVisiteurSelectionne) && $id == $idVisiteurSelectionne) {
+                        if (isset($_SESSION['idVisiteurSelectionne']) && $id == $_SESSION['idVisiteurSelectionne']) {
                             ?>
                             <option selected value = "<?php echo $id ?>">
                                 <?php echo $nom . ' ' . $prenom ?> </option>
@@ -48,7 +48,7 @@ if ($typeUtilisateur == 'comptable') { ?>
                         $mois = $unMois['mois'];
                         $numAnnee = $unMois['numAnnee'];
                         $numMois = $unMois['numMois'];
-                        if (isset($moisFicheSelectionne) && $mois == $moisFicheSelectionne) {
+                        if (isset($_SESSION['moisSelectionne']) && $mois == $_SESSION['moisSelectionne']) {
                             ?>
                             <option selected value="<?php echo $mois ?>">
                                 <?php echo $numMois . '/' . $numAnnee ?> </option>
@@ -66,4 +66,8 @@ if ($typeUtilisateur == 'comptable') { ?>
         <input id="ok" type="submit" value="Valider" class="btn btn-success" 
                    role="button">
     </form>
+<?php }
+} if ($estFicheValidee) { ?>
+    <p class="alert alert-success">La fiche du <?php echo $moisAnnee ?> pour le visiteur <?php echo htmlspecialchars($nomEtPrenomVisiteur['nom']) . ' '
+               . htmlspecialchars($nomEtPrenomVisiteur['prenom']) ?> a bien été validée.</p>
 <?php } ?>
