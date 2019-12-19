@@ -19,7 +19,7 @@ require_once 'includes/class.pdogsb.inc.php';
 session_start();
 $pdo = PdoGsb::getPdoGsb();
 $estConnecte = estConnecte();
-require 'vues/v_entete.php';
+$typeUtilisateur = typeUtilisateur();
 $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_STRING);
 if ($uc && !$estConnecte) {
     $uc = 'connexion';
@@ -31,13 +31,20 @@ case 'connexion':
     include 'controleurs/c_connexion.php';
     break;
 case 'accueil':
+    include 'vues/v_entete.php';
     include 'controleurs/c_accueil.php';
     break;
 case 'gererFrais':
+    include 'vues/v_entete.php';
     include 'controleurs/c_gererFrais.php';
     break;
 case 'etatFrais':
+    include 'vues/v_entete.php';
     include 'controleurs/c_etatFrais.php';
+    break;
+case 'validerFrais':
+    include 'vues/v_entete.php';
+    include 'controleurs/c_validerFrais.php';
     break;
 case 'deconnexion':
     include 'controleurs/c_deconnexion.php';

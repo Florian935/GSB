@@ -43,27 +43,57 @@
                     </div>
                     <div class="col-md-8">
                         <ul class="nav nav-pills pull-right" role="tablist">
-                            <li <?php if (!$uc || $uc == 'accueil') { ?>class="active" <?php } ?>>
-                                <a href="index.php">
+                            <li 
+                            <?php if ((!$uc || $uc == 'accueil') && $typeUtilisateur == 'visiteur') { ?> class="active" 
+                            <?php } elseif ((!$uc || $uc == 'accueil') && $typeUtilisateur == 'comptable') { ?> 
+                            class="active-comptable" 
+                            <?php } elseif ($uc == 'deconnexion') { ?> class="deconnexion" <?php } ?>>
+                                <a href="index.php" 
+                                <?php if ($typeUtilisateur == 'comptable') { ?>class="a-comptable" <?php } ?>>
                                     <span class="glyphicon glyphicon-home"></span>
                                     Accueil
                                 </a>
                             </li>
-                            <li <?php if ($uc == 'gererFrais') { ?>class="active"<?php } ?>>
+                            <li 
+                            <?php if (($uc == 'gererFrais') && $typeUtilisateur == 'visiteur') { ?> class="active"
+                            <?php } elseif (( $uc == 'validerFrais' || $uc == 'gererFrais') && $typeUtilisateur == 'comptable') { ?>
+                            class="active-comptable" 
+                            <?php } elseif ($uc == 'deconnexion') { ?> class="deconnexion" <?php } ?>>
+                                <?php if ($typeUtilisateur == 'visiteur') { ?>
                                 <a href="index.php?uc=gererFrais&action=saisirFrais">
                                     <span class="glyphicon glyphicon-pencil"></span>
                                     Renseigner la fiche de frais
-                                </a>
+                                </a> 
+                                <?php } else { ?>
+                                <a href="index.php?uc=validerFrais"
+                                <?php if ($typeUtilisateur == 'comptable') { ?>class="a-comptable" <?php } ?>>
+                                    <span class="glyphicon glyphicon-ok"></span>
+                                    Valider les fiches de frais
+                                </a> 
+                                <?php } ?>
                             </li>
-                            <li <?php if ($uc == 'etatFrais') { ?>class="active"<?php } ?>>
+                            <li 
+                            <?php if (($uc == 'etatFrais') && $typeUtilisateur == 'visiteur') { ?>class="active"
+                            <?php } elseif (($uc == 'etatFrais') && $typeUtilisateur == 'comptable') { ?>
+                            class="active-comptable" 
+                            <?php } elseif ($uc == 'deconnexion') { ?> class="deconnexion" <?php } ?>>
+                                <?php if ($typeUtilisateur == 'visiteur') { ?>
                                 <a href="index.php?uc=etatFrais&action=selectionnerMois">
                                     <span class="glyphicon glyphicon-list-alt"></span>
                                     Afficher mes fiches de frais
                                 </a>
+                                <?php } else { ?>
+                                    <a href="index.php?uc=etatFrais&action=selectionnerMois"
+                                    <?php if ($typeUtilisateur == 'comptable') { ?>class="a-comptable" <?php } ?>>
+                                    <span class="glyphicon glyphicon-euro"></span>
+                                    Suivre le paiement des fiches de frais
+                                </a>
+                                <?php } ?>
                             </li>
                             <li 
                             <?php if ($uc == 'deconnexion') { ?>class="active"<?php } ?>>
-                                <a href="index.php?uc=deconnexion&action=demandeDeconnexion">
+                                <a href="index.php?uc=deconnexion&action=demandeDeconnexion"
+                                <?php if ($typeUtilisateur == 'comptable') { ?>class="a-comptable" <?php } ?>>
                                     <span class="glyphicon glyphicon-log-out"></span>
                                     Déconnexion
                                 </a>

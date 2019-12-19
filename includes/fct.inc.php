@@ -14,6 +14,20 @@
  * @link      http://www.php.net/manual/fr/book.pdo.php PHP Data Objects sur php.net
  */
 
+/** 
+ * Retourne le type d'utilisateur
+ * 
+ * @return String le type d'utilisateur (soit comptable, soit visiteur)
+ */
+function typeUtilisateur()
+{
+    if (isset($_SESSION['typeUtilisateur'])) {
+        return $_SESSION['typeUtilisateur'];
+    } else {
+        return null;
+    }
+}
+
 /**
  * Teste si un quelconque visiteur est connecté
  *
@@ -21,23 +35,25 @@
  */
 function estConnecte()
 {
-    return isset($_SESSION['idVisiteur']);
+    return isset($_SESSION['idUtilisateur']);
 }
 
 /**
- * Enregistre dans une variable session les infos d'un visiteur
+ * Enregistre dans une variable session les infos de l'utilisateur
  *
- * @param String $idVisiteur ID du visiteur
- * @param String $nom        Nom du visiteur
- * @param String $prenom     Prénom du visiteur
+ * @param String $idUtilisateur   ID du visiteur
+ * @param String $nom             Nom du visiteur
+ * @param String $prenom          Prénom du visiteur
+ * @param String $typeUtilisateur type d'utilisateur (visiteur ou comptable)
  *
  * @return null
  */
-function connecter($idVisiteur, $nom, $prenom)
+function connecter($idUtilisateur, $nom, $prenom, $typeUtilisateur)
 {
-    $_SESSION['idVisiteur'] = $idVisiteur;
+    $_SESSION['idUtilisateur'] = $idUtilisateur;
     $_SESSION['nom'] = $nom;
     $_SESSION['prenom'] = $prenom;
+    $_SESSION['typeUtilisateur'] = $typeUtilisateur;
 }
 
 /**
@@ -48,6 +64,21 @@ function connecter($idVisiteur, $nom, $prenom)
 function deconnecter()
 {
     session_destroy();
+}
+
+/**
+ * Stocke dans une variable de session l'id du visiteur et le mois de la fiche 
+ * qui ont été selectionné par le comptable.
+ * 
+ * @param String $idVisiteurSelectionne id du visiteur selectionne
+ * @param Date   $mois moisSelectionne selectionné sous la forme aaaamm
+ * 
+ * @return null
+ */
+function setIdVisiteurEtMoisSelectionnes($idVisiteurSelectionne, $moisSelectionne) 
+{
+    $_SESSION['idVisiteurSelectionne'] = $idVisiteurSelectionne;
+    $_SESSION['moisSelectionne'] = $moisSelectionne;
 }
 
 /**
