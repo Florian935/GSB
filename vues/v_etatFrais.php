@@ -40,7 +40,7 @@
             <?php
             foreach ($lesFraisForfait as $unFraisForfait) {
                 $quantite = $unFraisForfait['quantite']; ?>
-                <td class="qteForfait"><?php echo htmlspecialchars($quantite) ?> </td>
+                <td class="qteForfait"><?php echo htmlspecialchars($quantite) ?></td>
                 <?php
             }
             ?>
@@ -71,3 +71,11 @@
         ?>
     </table>
 </div>
+<?php if (isset($idEtat) && $idEtat == 'VA') { ?>
+    <form action="index.php?uc=suivreFrais&action=rembourserFrais" 
+    method="post" role="form" class="form-group">
+    <button class="btn btn-success" type="submit">
+    Valider le remboursement de la fiche
+    </button>
+</form>
+<?php } ?>

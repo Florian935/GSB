@@ -88,7 +88,8 @@ class PdoGsb
      * @param String $login Login du comptable
      * @param String $mdp   Mot de passe du comptable
      * 
-     * @return l'id, le nom et le prénom du comptable sous la forme d'un tableau associatif
+     * @return l'id, le nom et le prénom du comptable sous la forme d'un 
+     * tableau associatif
      */
     public function getInfosComptable($login, $mdp)
     {
@@ -130,8 +131,10 @@ class PdoGsb
      * Retourne le nom et prénom du visiteur
      * 
      * @param String $id Id du visiteur
-     * @return le nom et prénom du visiteur sous forme d'un tableau associatif comprenant
-     * comme clé nom et prenom contenant respectivement le nom et prénom du visiteur
+     * 
+     * @return le nom et prénom du visiteur sous forme d'un tableau associatif 
+     * comprenant comme clé nom et prenom contenant respectivement le nom et 
+     * prénom du visiteur
      */
     public function getNomEtPrenomVisiteur($id)
     {
@@ -492,6 +495,7 @@ class PdoGsb
 
     /**
      * Retourne les mois depuis septembre 2016 jusqu'à la date actuelle
+     * 
      * @return un tableau associatif de clé un mois -aaaamm- et de valeurs
      *         l'année et le mois correspondant jusqu'au mois actuel
      */

@@ -71,7 +71,8 @@ function deconnecter()
  * qui ont été selectionné par le comptable.
  * 
  * @param String $idVisiteurSelectionne id du visiteur selectionne
- * @param Date   $mois moisSelectionne selectionné sous la forme aaaamm
+ * @param String $moisSelectionne       moisSelectionne selectionné sous 
+ *                                      la forme aaaamm
  * 
  * @return null
  */
