@@ -14,7 +14,6 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 
-
 $ficheExistante = false;
 $estFicheValidee = false;
 $idComptable = $_SESSION['idUtilisateur'];
@@ -50,6 +49,10 @@ if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
 if (isset($_SESSION['idVisiteurSelectionne']) && isset($_SESSION['moisSelectionne'])) {
     $idVisiteurSelectionne = $_SESSION['idVisiteurSelectionne'];
     $moisFicheSelectionne = $_SESSION['moisSelectionne'];
+    $nbJustificatifsDeBase = $pdo->getNbjustificatifs(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
 }
 
 $lesMois = $pdo->getTousLesMois();
