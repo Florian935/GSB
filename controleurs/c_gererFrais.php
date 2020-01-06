@@ -26,6 +26,10 @@ if ($typeUtilisateur == 'comptable') {
 } else {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($idVisiteur);
 }
+$nbJustificatifsDeBase = $pdo->getNbjustificatifs(
+    $_SESSION['idVisiteurSelectionne'], 
+    $_SESSION['moisSelectionne']
+);
 
 $lesVisiteurs = $pdo->getLesVisiteurs();
 $lesMois = $pdo->getTousLesMois();

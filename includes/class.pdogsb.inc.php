@@ -503,21 +503,69 @@ class PdoGsb
     {
         $dateActuelle = date('Ym');
         $annee = substr($dateActuelle, 0, 4);
-        $numMois = array('01', '02', '03', '04', '05', 
+        $numMoisActuelle = substr($dateActuelle, 4, 2);
+        $lesNumMois = array('01', '02', '03', '04', '05', 
         '06', '07', '08', '09', '10', '11', '12');
         $lesMois = array();
         for ($a = $annee; $a >= 2016; $a--) {
-            for ($m = count($numMois)-1; $m >= 0; $m--) {
-                $lesMois[] = array(
-                    'mois' => $a . $numMois[$m],
-                    'numAnnee' => $a,
-                    'numMois' => $numMois[$m]
-                );
-                if ($a == '2016' && $m == 8) {
-                    $a = 2015;
-                    $m = -1;
+            if ($a == $annee) {
+                for ($i = 0; $i < count($lesNumMois)-1; $i++) {
+                    if ($numMoisActuelle == $lesNumMois[$i]) {
+                        $indexTableau = $i;
+                    }
+                };
+                for ($m = $indexTableau; $m >= $indexTableau; $m--) {
+                    $lesMois[] = array(
+                        'mois' => $a . $lesNumMois[$m],
+                        'numAnnee' => $a,
+                        'numMois' => $lesNumMois[$m]
+                    );
+                }
+            } else {
+                for ($m = count($lesNumMois)-1; $m >= 0; $m--) {
+                    $lesMois[] = array(
+                        'mois' => $a . $lesNumMois[$m],
+                        'numAnnee' => $a,
+                        'numMois' => $lesNumMois[$m]
+                    );
+                    if ($a == '2016' && $m == 8) {
+                        $a = 2015;
+                        $m = -1;
+                    }
                 }
             }
+            
+        }
+        return $lesMois;
+    }
+
+    /**
+     * Retourne les mois des fiches étant dans l'état clôturé pour un visiteur donné
+     * 
+     * @param String $idVisiteur ID du visiteur
+     * 
+     * @return un tableau associatif de clé un mois -aaaamm- et de valeurs
+     *         l'année et le mois correspondant
+     */
+    public function getLesMoisFicheClotureVisiteur($idVisiteur) 
+    {
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'SELECT fichefrais.mois as mois '
+            . ' FROM fichefrais '
+            . 'WHERE fichefrais.idvisiteur = :unIdVisiteur '
+            . "AND fichefrais.idetat = 'CL'"
+            . 'ORDER BY fichefrais.mois desc'
+        );
+        $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $lesMoisRetournes = $requetePrepare->fetchAll();
+        $lesMois = array();
+        foreach ($lesMoisRetournes as $unMois) {
+            $lesMois[] = array(
+                'mois' => strval($unMois['mois']),
+                'numAnnee' => substr(strval($unMois['mois']), 0, 4),
+                'numMois' => substr(strval($unMois['mois']), 4, 2)
+            );
         }
         return $lesMois;
     }
