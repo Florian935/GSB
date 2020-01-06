@@ -128,8 +128,7 @@
                             <?php if ($uc == 'deconnexion') { 
                                 ?>class="active"<?php 
                             } ?>>
-                                <a href="index.php?uc=deconnexion
-                                         &action=demandeDeconnexion"
+                                <a href="index.php?uc=deconnexion&action=demandeDeconnexion"
                                 <?php if ($typeUtilisateur == 'comptable') { 
                                     ?>class="a-comptable" <?php 
                                 } ?>>

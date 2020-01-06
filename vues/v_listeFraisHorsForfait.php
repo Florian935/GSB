@@ -138,7 +138,7 @@
             <input type="text" id="nb-justificatif" 
                 name="nbJustificatif"
                 size="10" maxlength="5" 
-                value="0" 
+                value="<?php echo $nbJustificatifsDeBase?>" 
                 class="form-control">
             <button class="btn btn-success" type="submit">Valider les justificatifs</button>
         </div>
