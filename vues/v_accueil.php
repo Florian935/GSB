@@ -29,8 +29,16 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
+        <div <?php if ($typeUtilisateur == 'visiteur') { 
+            ?>class="panel panel-primary" 
+       <?php } else if ($typeUtilisateur == 'comptable') { 
+                    ?>class="panel panel-primary-comptable" <?php 
+   } ?>>
+    <div <?php if ($typeUtilisateur == 'visiteur') { 
+        ?>class="panel-heading" 
+   <?php } else if ($typeUtilisateur == 'comptable') { 
+                ?>class="panel-heading-comptable" <?php 
+   } ?>>
                 <h3 class="panel-title">
                     <span class="glyphicon glyphicon-bookmark"></span>
                     Navigation
@@ -44,7 +52,11 @@
                            class="btn btn-success btn-lg" role="button">
                         <?php } else { ?>
                         <a href="index.php?uc=validerFrais&action=validationFrais"
-                           class="btn btn-success btn-lg" role="button">
+                            <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?>class="btn btn-success btn-lg" <?php 
+                            } else if ($typeUtilisateur == 'comptable') { 
+                                ?>class="btn btn-success-comptable btn-lg" <?php 
+                            } ?> role="button">
                         <?php } ?>
                             <span <?php if ($typeUtilisateur == 'visiteur') { 
                                 ?> 
@@ -62,7 +74,7 @@
                            class="btn btn-primary btn-lg" role="button">
                         <?php } else { ?>
                         <a href="index.php?uc=suivreFrais"
-                            class="btn btn-primary btn-lg" role="button">
+                            class="btn btn-primary-comptable btn-lg" role="button">
                         <?php } ?>
                             <span <?php if ($typeUtilisateur == 'visiteur') { 
                                 ?> 

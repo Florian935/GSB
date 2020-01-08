@@ -3174,6 +3174,11 @@ html {
     background-color: #337ab7;
     border-color: #2e6da4;
   }
+  .btn-primary-comptable {
+    color: #fff;
+    background-color:#db440d;
+    border-color: #db440d;
+  }
   .btn-primary:focus,
   .btn-primary.focus {
     color: #fff;
@@ -3184,6 +3189,11 @@ html {
     color: #fff;
     background-color: #286090;
     border-color: #204d74;
+  }
+  .btn-primary-comptable:hover {
+    color: #fff;
+    background-color:#a8340a;
+    border-color: #a8340a;
   }
   .btn-primary:active,
   .btn-primary.active,
@@ -3231,6 +3241,11 @@ html {
     background-color: #5cb85c;
     border-color: #4cae4c;
   }
+  .btn-success-comptable {
+    color: #fff;
+    background-color: orange;
+    border-color: orange;
+  }
   .btn-success:focus,
   .btn-success.focus {
     color: #fff;
@@ -3241,6 +3256,11 @@ html {
     color: #fff;
     background-color: #449d44;
     border-color: #398439;
+  }
+  .btn-success-comptable:hover {
+    color: #fff;
+    background-color: #d67d00;
+    border-color: #d67d00;
   }
   .btn-success:active,
   .btn-success.active,
@@ -5526,6 +5546,14 @@ html {
     border-top-left-radius: 3px;
     border-top-right-radius: 3px;
   }
+  .panel-heading-comptable {
+    color: white;
+    background-color: orange;
+    padding: 10px 15px;
+    border-bottom: 1px solid transparent;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+  }
   .panel-heading > .dropdown .dropdown-toggle {
     color: inherit;
   }
@@ -5764,6 +5792,9 @@ html {
   }
   .panel-primary {
     border-color: #337ab7;
+  }
+  .panel-primary-comptable {
+    border-color: orange;
   }
   .panel-primary > .panel-heading {
     color: #fff;

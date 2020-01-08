@@ -249,7 +249,13 @@ if ($ficheExistante && !$estFicheValidee && $libEtat == 'CL') {
     );
     include 'vues/v_listeFraisForfait.php';
     include 'vues/v_listeFraisHorsForfait.php';
-} elseif ($ficheExistante && !$estFicheValidee && !$libEtat != 'CL') {
+} elseif ($ficheExistante && !$estFicheValidee && $libEtat == 'CR') {
+    ajouterErreur(
+        'Cette fiche pour ce visiteur est en cours de saisie, il n\'est donc pas 
+        encore possible de la valider., veuillez en choisir une autre.'
+    );
+    include 'vues/v_erreurs.php';
+} elseif ($ficheExistante && !$estFicheValidee && $libEtat != 'CL') {
     ajouterErreur(
         'Cette fiche pour ce visiteur a déjà été validée, veuillez en 
         choisir une autre.'
