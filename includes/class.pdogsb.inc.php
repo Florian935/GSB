@@ -691,7 +691,7 @@ class PdoGsb
 
     /**
      * Retourne le montant validé d'une fiche pour un visiteur donné 
-     * et un mois donné
+     * et un mois donné sans prendre en compte les frais hors forfait refusés
      * 
      * @param String $idVisiteur id du visiteur
      * @param String $mois       Mois sous la forme aaaamm

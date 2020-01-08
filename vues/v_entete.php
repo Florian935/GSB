@@ -108,8 +108,7 @@
                             class="deconnexion" <?php 
                             } ?>>
                                 <?php if ($typeUtilisateur == 'visiteur') { ?>
-                                <a href="index.php?uc=etatFrais
-                                         &action=selectionnerMois">
+                                <a href="index.php?uc=etatFrais&action=selectionnerMois">
                                     <span class="glyphicon glyphicon-list-alt">
                                     </span>
                                     Afficher mes fiches de frais
