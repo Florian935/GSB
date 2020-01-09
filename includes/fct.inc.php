@@ -152,9 +152,11 @@ function estEntierPositif($valeur)
 function estTableauEntiers($tabEntiers)
 {
     $boolReturn = true;
-    foreach ($tabEntiers as $unEntier) {
-        if (!estEntierPositif($unEntier)) {
-            $boolReturn = false;
+    if (isset($tabEntiers)) {
+        foreach ($tabEntiers as $unEntier) {
+            if (!estEntierPositif($unEntier)) {
+                $boolReturn = false;
+            }
         }
     }
     return $boolReturn;
