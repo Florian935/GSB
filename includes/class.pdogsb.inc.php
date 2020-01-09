@@ -83,7 +83,8 @@ class PdoGsb
     }
 
     /**
-     * Retourne les informmations d'un comptable
+     * Retourne les informations d'un comptable sous condition que 
+     * le mdp saisi par le visiteur soit correct
      * 
      * @param String $login Login du comptable
      * @param String $mdp   Mot de passe du comptable
@@ -93,6 +94,17 @@ class PdoGsb
      */
     public function getInfosComptable($login, $mdp)
     {
+        // Hâchge du mdp entré grâce à l'algorithme sha256
+        $mdpCrypte = hash("sha256", $mdp);
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'SELECT mdp '
+            . 'FROM comptable '
+            . 'WHERE login = :unLogin'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $mdpStocke = $requetePrepare->fetch();
+
         $requetePrepare = PdoGsb::$monPdo->prepare(
             'SELECT comptable.id AS id, comptable.nom AS nom, '
             . 'comptable.prenom AS prenom '
@@ -100,13 +112,23 @@ class PdoGsb
             . 'WHERE comptable.login = :unLogin AND comptable.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', $mdpCrypte, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetch();
+        $infosComptable = $requetePrepare->fetch();
+
+        /* Si la clé de hashage obtenue est identique à celle stockée en BDD, alors
+         * on retourne les infos du comptable
+         */
+        if ($mdpCrypte == $mdpStocke['mdp']) {
+            return $infosComptable;
+        } else {
+            return null;
+        }
     }
 
     /**
-     * Retourne les informations d'un visiteur
+     * Retourne les informations d'un visiteur sous condition que 
+     * le mdp saisi par le visiteur soit correct
      *
      * @param String $login Login du visiteur
      * @param String $mdp   Mot de passe du visiteur
@@ -115,6 +137,16 @@ class PdoGsb
      */
     public function getInfosVisiteur($login, $mdp)
     {
+        $mdpCrypte = hash("sha256", $mdp);
+        $requetePrepare = PdoGSB::$monPdo->prepare(
+            'SELECT mdp '
+            . 'FROM visiteur '
+            . 'WHERE login = :unLogin'
+        );
+        $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
+        $requetePrepare->execute();
+        $mdpStocke = $requetePrepare->fetch();
+
         $requetePrepare = PdoGsb::$monPdo->prepare(
             'SELECT visiteur.id AS id, visiteur.nom AS nom, '
             . 'visiteur.prenom AS prenom '
@@ -122,9 +154,18 @@ class PdoGsb
             . 'WHERE visiteur.login = :unLogin AND visiteur.mdp = :unMdp'
         );
         $requetePrepare->bindParam(':unLogin', $login, PDO::PARAM_STR);
-        $requetePrepare->bindParam(':unMdp', $mdp, PDO::PARAM_STR);
+        $requetePrepare->bindParam(':unMdp', $mdpCrypte, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetch();
+        $infosVisiteur = $requetePrepare->fetch();
+
+        /* Si la clé de hashage obtenue est identique à celle stockée en BDD, alors
+         * on retourne les infos du visiteur
+         */
+        if ($mdpCrypte == $mdpStocke['mdp']) {
+            return $infosVisiteur;
+        } else {
+            return null;
+        }
     }
 
     /** 
