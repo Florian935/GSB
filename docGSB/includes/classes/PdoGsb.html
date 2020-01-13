@@ -154,8 +154,18 @@ pour un visiteur et un mois donnés</span><pre>creeNouvellesLignesFrais</pre>
     </li>
 
                                                                                                         <li class="method public">
-        <a href="#method_getInfosVisiteur" title="getInfosVisiteur :: Retourne les informations d&#039;un visiteur">
-            <span class="description">Retourne les informations d&#039;un visiteur</span><pre>getInfosVisiteur</pre>
+        <a href="#method_getInfosComptable" title="getInfosComptable :: Retourne les informations d&#039;un comptable sous condition que
+le mdp saisi par le visiteur soit correct">
+            <span class="description">Retourne les informations d&#039;un comptable sous condition que
+le mdp saisi par le visiteur soit correct</span><pre>getInfosComptable</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_getInfosVisiteur" title="getInfosVisiteur :: Retourne les informations d&#039;un visiteur sous condition que
+le mdp saisi par le visiteur soit correct">
+            <span class="description">Retourne les informations d&#039;un visiteur sous condition que
+le mdp saisi par le visiteur soit correct</span><pre>getInfosVisiteur</pre>
         </a>
     </li>
 
@@ -196,8 +206,34 @@ mois donné</span><pre>getLesInfosFicheFrais</pre>
     </li>
 
                                                                                                         <li class="method public">
+        <a href="#method_getLesMoisFicheClotureVisiteur" title="getLesMoisFicheClotureVisiteur :: Retourne les mois des fiches étant dans l&#039;état clôturé pour un visiteur donné">
+            <span class="description">Retourne les mois des fiches étant dans l&#039;état clôturé pour un visiteur donné</span><pre>getLesMoisFicheClotureVisiteur</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_getLesVisiteurs" title="getLesVisiteurs :: Retourne les informations de tous les visiteurs">
+            <span class="description">Retourne les informations de tous les visiteurs</span><pre>getLesVisiteurs</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_getMontantValideHorsFraisRefuses" title="getMontantValideHorsFraisRefuses :: Retourne le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné sans prendre en compte les frais hors forfait refusés">
+            <span class="description">Retourne le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné sans prendre en compte les frais hors forfait refusés</span><pre>getMontantValideHorsFraisRefuses</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
         <a href="#method_getNbjustificatifs" title="getNbjustificatifs :: Retourne le nombre de justificatif d&#039;un visiteur pour un mois donné">
             <span class="description">Retourne le nombre de justificatif d&#039;un visiteur pour un mois donné</span><pre>getNbjustificatifs</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_getNomEtPrenomVisiteur" title="getNomEtPrenomVisiteur :: Retourne le nom et prénom du visiteur">
+            <span class="description">Retourne le nom et prénom du visiteur</span><pre>getNomEtPrenomVisiteur</pre>
         </a>
     </li>
 
@@ -206,6 +242,12 @@ mois donné</span><pre>getLesInfosFicheFrais</pre>
 Appel : $instancePdoGsb = PdoGsb::getPdoGsb();">
             <span class="description">Fonction statique qui crée l&#039;unique instance de la classe
 Appel : $instancePdoGsb = PdoGsb::getPdoGsb();</span><pre>getPdoGsb</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_getTousLesMois" title="getTousLesMois :: Retourne les mois depuis septembre 2016 jusqu&#039;à la date actuelle">
+            <span class="description">Retourne les mois depuis septembre 2016 jusqu&#039;à la date actuelle</span><pre>getTousLesMois</pre>
         </a>
     </li>
 
@@ -226,6 +268,22 @@ un mois donné en enregistrant les nouveaux montants</span><pre>majFraisForfait<
     </li>
 
                                                                                                         <li class="method public">
+        <a href="#method_majFraisHorsForfait" title="majFraisHorsForfait :: Met à jour un frais hors forfait pour un visiteur et un mois donné
+à partir des informations fournies en paramètre">
+            <span class="description">Met à jour un frais hors forfait pour un visiteur et un mois donné
+à partir des informations fournies en paramètre</span><pre>majFraisHorsForfait</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
+        <a href="#method_majMontantValide" title="majMontantValide :: Met à jour le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné">
+            <span class="description">Met à jour le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné</span><pre>majMontantValide</pre>
+        </a>
+    </li>
+
+                                                                                                        <li class="method public">
         <a href="#method_majNbJustificatifs" title="majNbJustificatifs :: Met à jour le nombre de justificatifs de la table ficheFrais
 pour le mois et le visiteur concerné">
             <span class="description">Met à jour le nombre de justificatifs de la table ficheFrais
@@ -239,11 +297,21 @@ pour le mois et le visiteur concerné</span><pre>majNbJustificatifs</pre>
         </a>
     </li>
 
+                                                                                                        <li class="method public">
+        <a href="#method_validerLaFiche" title="validerLaFiche :: Permet de valider la fiche pour un visiteur donné et un mois donné
+en modifiant la date de modification de la fiche à celle du jour actuel et
+en affectant le comptable qui a effectué la validation à la fiche">
+            <span class="description">Permet de valider la fiche pour un visiteur donné et un mois donné
+en modifiant la date de modification de la fiche à celle du jour actuel et
+en affectant le comptable qui a effectué la validation à la fiche</span><pre>validerLaFiche</pre>
+        </a>
+    </li>
+
                                                 </ul>
         </li>
         <li class="nav-header protected">» Protected
             <ul>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </ul>
         </li>
         <li class="nav-header private">» Private
             <ul>
@@ -254,7 +322,7 @@ pour toutes les méthodes de la classe">
 pour toutes les méthodes de la classe</span><pre>__construct</pre>
                             </a>
                         </li>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </ul>
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </ul>
         </li>
         <li class="nav-header">
             <i class="icon-custom icon-constant"></i> Constants
@@ -564,9 +632,43 @@ les lignes de frais forfait de quantités nulles</p></div>
                             </div>
 
                         </div>
+                                            <a id="method_getInfosComptable"></a>
+                        <div class="element clickable method public  method_getInfosComptable" data-toggle="collapse" data-target=".method_getInfosComptable .collapse">
+                            <h2>Retourne les informations d&#039;un comptable sous condition que
+le mdp saisi par le visiteur soit correct</h2>
+                            <pre>getInfosComptable(String $login, String $mdp) : \l&#039;id,</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$login</h4>
+                                                <code>String</code><p><p>Login du comptable</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mdp</h4>
+                                                <code>String</code><p><p>Mot de passe du comptable</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\l'id,</code><p><p>le nom et le prénom du comptable sous la forme d'un
+tableau associatif</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_getInfosVisiteur"></a>
                         <div class="element clickable method public  method_getInfosVisiteur" data-toggle="collapse" data-target=".method_getInfosVisiteur .collapse">
-                            <h2>Retourne les informations d&#039;un visiteur</h2>
+                            <h2>Retourne les informations d&#039;un visiteur sous condition que
+le mdp saisi par le visiteur soit correct</h2>
                             <pre>getInfosVisiteur(String $login, String $mdp) : \l&#039;id,</pre>
                             <div class="labels">
                                                                                                                                                                                             </div>
@@ -752,6 +854,95 @@ l'année et le mois correspondant</p></p>
                             </div>
 
                         </div>
+                                            <a id="method_getLesMoisFicheClotureVisiteur"></a>
+                        <div class="element clickable method public  method_getLesMoisFicheClotureVisiteur" data-toggle="collapse" data-target=".method_getLesMoisFicheClotureVisiteur .collapse">
+                            <h2>Retourne les mois des fiches étant dans l&#039;état clôturé pour un visiteur donné</h2>
+                            <pre>getLesMoisFicheClotureVisiteur(String $idVisiteur) : \un</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idVisiteur</h4>
+                                                <code>String</code><p><p>ID du visiteur</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\un</code><p><p>tableau associatif de clé un mois -aaaamm- et de valeurs
+l'année et le mois correspondant</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getLesVisiteurs"></a>
+                        <div class="element clickable method public  method_getLesVisiteurs" data-toggle="collapse" data-target=".method_getLesVisiteurs .collapse">
+                            <h2>Retourne les informations de tous les visiteurs</h2>
+                            <pre>getLesVisiteurs() : \l&#039;id,</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>\l'id,</code><p><p>le nom et le prénom sous la forme d'un tableau associatif</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getMontantValideHorsFraisRefuses"></a>
+                        <div class="element clickable method public  method_getMontantValideHorsFraisRefuses" data-toggle="collapse" data-target=".method_getMontantValideHorsFraisRefuses .collapse">
+                            <h2>Retourne le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné sans prendre en compte les frais hors forfait refusés</h2>
+                            <pre>getMontantValideHorsFraisRefuses(String $idVisiteur, String $mois) : \le</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idVisiteur</h4>
+                                                <code>String</code><p><p>id du visiteur</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mois</h4>
+                                                <code>String</code><p><p>Mois sous la forme aaaamm</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\le</code><p><p>montant validé</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_getNbjustificatifs"></a>
                         <div class="element clickable method public  method_getNbjustificatifs" data-toggle="collapse" data-target=".method_getNbjustificatifs .collapse">
                             <h2>Retourne le nombre de justificatif d&#039;un visiteur pour un mois donné</h2>
@@ -783,6 +974,35 @@ l'année et le mois correspondant</p></p>
                             </div>
 
                         </div>
+                                            <a id="method_getNomEtPrenomVisiteur"></a>
+                        <div class="element clickable method public  method_getNomEtPrenomVisiteur" data-toggle="collapse" data-target=".method_getNomEtPrenomVisiteur .collapse">
+                            <h2>Retourne le nom et prénom du visiteur</h2>
+                            <pre>getNomEtPrenomVisiteur(String $id) : \le</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$id</h4>
+                                                <code>String</code><p><p>Id du visiteur</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>\le</code><p><p>nom et prénom du visiteur sous forme d'un tableau associatif
+comprenant comme clé nom et prenom contenant respectivement le nom et
+prénom du visiteur</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_getPdoGsb"></a>
                         <div class="element clickable method public  method_getPdoGsb" data-toggle="collapse" data-target=".method_getPdoGsb .collapse">
                             <h2>Fonction statique qui crée l&#039;unique instance de la classe
@@ -809,6 +1029,36 @@ Appel : $instancePdoGsb = PdoGsb::getPdoGsb();</h2>
                                     
                                                                             <h3>Response</h3>
                                         <code>\l'unique</code><p><p>objet de la classe PdoGsb</p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_getTousLesMois"></a>
+                        <div class="element clickable method public  method_getTousLesMois" data-toggle="collapse" data-target=".method_getTousLesMois .collapse">
+                            <h2>Retourne les mois depuis septembre 2016 jusqu&#039;à la date actuelle</h2>
+                            <pre>getTousLesMois() : \un</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                    <tr>
+                                                <th>
+                                                    
+                                                </th>
+                                                <td>
+                                                                                                    </td>
+                                            </tr>
+                                                                                                                    </table>
+
+                                    
+                                                                            <h3>Response</h3>
+                                        <code>\un</code><p><p>tableau associatif de clé un mois -aaaamm- et de valeurs
+l'année et le mois correspondant jusqu'au mois actuel</p></p>
                                                                     </div>
                             </div>
 
@@ -886,6 +1136,90 @@ de valeur la quantité pour ce frais</p></p>
                             </div>
 
                         </div>
+                                            <a id="method_majFraisHorsForfait"></a>
+                        <div class="element clickable method public  method_majFraisHorsForfait" data-toggle="collapse" data-target=".method_majFraisHorsForfait .collapse">
+                            <h2>Met à jour un frais hors forfait pour un visiteur et un mois donné
+à partir des informations fournies en paramètre</h2>
+                            <pre>majFraisHorsForfait(String $idFraisHorsForfait, String $idVisiteur, String $mois, String $libelle, String $date, Float $montant) : null</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idFraisHorsForfait</h4>
+                                                <code>String</code><p><p>ID du frais hors forfait</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idVisiteur</h4>
+                                                <code>String</code><p><p>ID du visiteur</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mois</h4>
+                                                <code>String</code><p><p>Mois sous la forme aaaamm</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$libelle</h4>
+                                                <code>String</code><p><p>Libellé du frais</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$date</h4>
+                                                <code>String</code><p><p>Date du frais au format français jj//mm/aaaa</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$montant</h4>
+                                                <code>Float</code><p><p>Montant du frais</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_majMontantValide"></a>
+                        <div class="element clickable method public  method_majMontantValide" data-toggle="collapse" data-target=".method_majMontantValide .collapse">
+                            <h2>Met à jour le montant validé d&#039;une fiche pour un visiteur donné
+et un mois donné</h2>
+                            <pre>majMontantValide(String $idVisiteur, String $mois, String $montantValide) : null</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idVisiteur</h4>
+                                                <code>String</code><p><p>id du visiteur</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mois</h4>
+                                                <code>String</code><p><p>mois sous la forme aaaamm</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$montantValide</h4>
+                                                <code>String</code><p><p>montant validé pour la fiche</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
                                             <a id="method_majNbJustificatifs"></a>
                         <div class="element clickable method public  method_majNbJustificatifs" data-toggle="collapse" data-target=".method_majNbJustificatifs .collapse">
                             <h2>Met à jour le nombre de justificatifs de la table ficheFrais
@@ -941,6 +1275,43 @@ pour le mois et le visiteur concerné</h2>
                                                                                     <div class="subelement argument">
                                                 <h4>$idFrais</h4>
                                                 <code>String</code><p><p>ID du frais</p></p>
+                                            </div>
+                                                                            
+                                                                            <h3>Response</h3>
+                                        <code>null</code><p></p>
+                                                                    </div>
+                            </div>
+
+                        </div>
+                                            <a id="method_validerLaFiche"></a>
+                        <div class="element clickable method public  method_validerLaFiche" data-toggle="collapse" data-target=".method_validerLaFiche .collapse">
+                            <h2>Permet de valider la fiche pour un visiteur donné et un mois donné
+en modifiant la date de modification de la fiche à celle du jour actuel et
+en affectant le comptable qui a effectué la validation à la fiche</h2>
+                            <pre>validerLaFiche(String $idVisiteur, String $idComptable, String $mois) : null</pre>
+                            <div class="labels">
+                                                                                                                                                                                            </div>
+
+                            
+                            <div class="row collapse">
+                                <div class="detail-description">
+                                    <div class="long_description"></div>
+
+                                    <table class="table">
+                                                                                                                    </table>
+
+                                                                            <h3>Arguments</h3>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idVisiteur</h4>
+                                                <code>String</code><p><p>ID du visiteur</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$idComptable</h4>
+                                                <code>String</code><p><p>ID du comptable</p></p>
+                                            </div>
+                                                                                    <div class="subelement argument">
+                                                <h4>$mois</h4>
+                                                <code>String</code><p><p>Mois sous la forme aaaamm</p></p>
                                             </div>
                                                                             
                                                                             <h3>Response</h3>
@@ -1122,7 +1493,7 @@ pour le mois et le visiteur concerné</h2>
             Template is built using <a href="http://twitter.github.com/bootstrap/">Twitter Bootstrap 2</a> and icons provided by
             <a href="http://glyphicons.com/">Glyphicons</a>.<br/>
             Documentation is powered by <a href="http://www.phpdoc.org/">phpDocumentor </a> and<br/>
-            generated on Thu, 07 Nov 2019 15:20:44 +0000.<br/>
+            generated on Mon, 13 Jan 2020 13:35:49 +0000.<br/>
     </footer>
     </body>
 </html>
