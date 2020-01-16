@@ -16,6 +16,7 @@
 
 require_once 'includes/fct.inc.php';
 require_once 'includes/class.pdogsb.inc.php';
+use PdoGsb\PdoGsb;
 session_start();
 $pdo = PdoGsb::getPdoGsb();
 $estConnecte = estConnecte();
