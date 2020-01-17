@@ -16,8 +16,9 @@
 
 require_once 'includes/fct.inc.php';
 require_once 'includes/class.pdogsb.inc.php';
+use PdoGsb\PdoGsb;
 session_start();
-$pdo = PdoGsb::getPdoGsb();
+$pdo = PdoGsb::getPdoGsb('PdoGsb');
 $estConnecte = estConnecte();
 $typeUtilisateur = typeUtilisateur();
 $uc = filter_input(INPUT_GET, 'uc', FILTER_SANITIZE_STRING);
