@@ -78,15 +78,10 @@ class PdoGsb
      *
      * @return l'unique objet de la classe PdoGsb
      */
-    public static function getPdoGsb($typePdo)
+    public static function getPdoGsb()
     {
         if (PdoGsb::$_monPdoGsb == null) {
-            if ($typePdo == 'PdoGsb') {
-                PdoGsb::$_monPdoGsb = new PdoGsb();
-            } elseif ($typePdo == 'PdoGsbTest') {
-                PdoGsb::$_monPdoGsb = new PdoGsbTest();
-            }
-            
+            PdoGsb::$_monPdoGsb = new PdoGsb();
         }
         return PdoGsb::$_monPdoGsb;
     }
