@@ -44,6 +44,7 @@ class PdoGsb
 {
     private static $_serveur = 'mysql:host=localhost';
     private static $_bdd = 'dbname=id11601272_appligsb';
+    private static $_bddTest = 'dbname=id11601272_appligsb_test';
     private static $_user = 'id11601272_usergsb';
     private static $_mdp = 'PPEappliBDD97531';
     private static $_monPdo;
@@ -53,13 +54,21 @@ class PdoGsb
      * Constructeur privé, crée l'instance de PDO qui sera sollicitée
      * pour toutes les méthodes de la classe
      */
-    private function __construct()
+    private function __construct($typePdo)
     {
-        PdoGsb::$_monPdo = new PDO(
-            PdoGsb::$_serveur . ';' . PdoGsb::$_bdd,
-            PdoGsb::$_user,
-            PdoGsb::$_mdp
-        );
+        if ($typePdo == 'PdoGsb') {
+            PdoGsb::$_monPdo = new PDO(
+                PdoGsb::$_serveur . ';' . PdoGsb::$_bdd,
+                PdoGsb::$_user,
+                PdoGsb::$_mdp
+            );
+        } elseif ($typePdo == 'PdoGsbTest') {
+            PdoGsb::$_monPdo = new PDO(
+                PdoGsb::$_serveur . ';' . PdoGsb::$_bddTest,
+                PdoGsb::$_user,
+                PdoGsb::$_mdp
+            );
+        }
         PdoGsb::$_monPdo->query('SET CHARACTER SET utf8');
     }
 
@@ -78,10 +87,15 @@ class PdoGsb
      *
      * @return l'unique objet de la classe PdoGsb
      */
-    public static function getPdoGsb()
+    public static function getPdoGsb($typePdo)
     {
         if (PdoGsb::$_monPdoGsb == null) {
-            PdoGsb::$_monPdoGsb = new PdoGsb();
+            if ($typePdo == 'PdoGsb') {
+                PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsb');
+            } elseif ($typePdo == 'PdoGsbTest') {
+                PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsbTest');
+            }
+            
         }
         return PdoGsb::$_monPdoGsb;
     }
@@ -664,7 +678,7 @@ class PdoGsb
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
-        $laLigne = $requetePrepare->fetch();
+        $laLigne = $requetePrepare->fetch(PDO::FETCH_ASSOC);
         return $laLigne;
     }
 

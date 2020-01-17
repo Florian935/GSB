@@ -753,7 +753,6 @@ return array(
     'PHP_Token_YIELD' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'PHP_Token_YIELD_FROM' => $vendorDir . '/phpunit/php-token-stream/src/Token.php',
     'Parsedown' => $vendorDir . '/erusev/parsedown/Parsedown.php',
-    'PdoGsb\\Math' => $baseDir . '/includes/class.pdogsb.inc.php',
     'PdoGsb\\PdoGsb' => $baseDir . '/includes/class.pdogsb.inc.php',
     'PharIo\\Manifest\\Application' => $vendorDir . '/phar-io/manifest/src/values/Application.php',
     'PharIo\\Manifest\\ApplicationName' => $vendorDir . '/phar-io/manifest/src/values/ApplicationName.php',

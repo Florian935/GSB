@@ -27,14 +27,8 @@ require_once 'includes/fct.inc.php';
 
 class PdoGsbTest extends PHPUnit\Framework\TestCase
 {
-    private static $_serveur = 'mysql:host=localhost';
-    private static $_bdd = 'dbname=id11601272_appligsb_test';
-    private static $_user = 'id11601272_usergsb';
-    private static $_mdp = 'PPEappliBDD97531';
-    private static $_pdoGsbTest; // contient l'objet PDO de la classe PdoGsbTest
     private static $_pdoGsb; // contient l'unique objet PDO de la classe PdoGsb
     private static $_monPdoGsb; // unique instance de la classe PdoGsb
-    private static $_monPdoGsbTest; // unique instance de la classe PdoGsbTest
 
     /** 
      * Appel automatique par phpUnit de la méthode setUpBeforeClass 
@@ -44,26 +38,26 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
      */
     static function setUpBeforeClass() : void
     {
-        PdoGsbTest::$_pdoGsbTest = new PDO(
-            PdoGsbTest::$_serveur . ';' . PdoGsbTest::$_bdd,
-            PdoGsbTest::$_user,
-            PdoGsbTest::$_mdp
-        );
-        PdoGsbTest::$_pdoGsbTest->query('SET CHARACTER SET utf8');
-        PdoGsbTest::$_monPdoGsb = PdoGsb::getPdoGsb();
+        // PdoGsbTest::$_pdoGsbTest = new PDO(
+        //     PdoGsbTest::$_serveur . ';' . PdoGsbTest::$_bdd,
+        //     PdoGsbTest::$_user,
+        //     PdoGsbTest::$_mdp
+        // );
+        // PdoGsbTest::$_pdoGsbTest->query('SET CHARACTER SET utf8');
+        PdoGsbTest::$_monPdoGsb = PdoGsb::getPdoGsb('PdoGsbTest');
         PdoGsbTest::$_pdoGsb = PdoGsb::getMonPdo();
 
 
         /* Initialisation de toutes les requêtes d'insertion et de suppression
          * sur la BDD de test afin de pouvoir effectuer des tests.
          */
-        $requetePrepare = PdoGsbTest::$_pdoGsbTest->prepare(
-            'INSERT INTO fichefrais (idvisiteur, mois) '
-            . "VALUES ('a131', '202505')"
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'INSERT INTO fichefrais (idvisiteur, mois, nbjustificatifs, idetat) '
+            . "VALUES ('a131', '202505', 7, 'CR')"
         );
         $requetePrepare->execute();
 
-        $requetePrepare = PdoGsbTest::$_pdoGsbTest->prepare(
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
             'INSERT INTO lignefraisforfait (idvisiteur, mois, '
             . 'idfraisforfait, quantite) '
             . "VALUES ('a131', '202505', 'ETP', '5'), "
@@ -76,13 +70,40 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
 
     /**
      * Méthode appelée par phpUnit avant l'execution de chaque tests définis
+     * 
+     * @return void
      */
-    function setUp() : void
+    function setUp() : void 
     {
-        if (PdoGsbTest::$_monPdoGsb == null) {
-            PdoGsbTest::$_monPdoGsb = new PdoGsbTest();
-        }
     }
+
+    /**
+     * Traitements effectués lorsque tous les tests sont 
+     * terminés.
+     * Ces traitements sont nécessaires afin de retrouver la 
+     * BDD de test initial et ainsi avoir la BDD dans un état 
+     * cohérent.
+     * 
+     * @return void
+     */
+    public static function tearDownAfterClass() : void
+    { 
+        /* Suppression des frais forfaits qui ont été ajoutés
+         * lors du début des tests
+         */
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'DELETE FROM lignefraisforfait '
+            . "WHERE idvisiteur = 'a131' AND mois IN ('202505', '202506')"
+        );
+        $requetePrepare->execute();
+
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'DELETE FROM fichefrais '
+            . "WHERE idvisiteur = 'a131' AND mois IN ('202505', '202506')"
+        );
+        $requetePrepare->execute();
+    }
+
 
     /**
      * Teste que la fonction getInfosComptable retourne l'id du comptable
@@ -392,6 +413,195 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
         $this->assertEquals($dernierMois, $testDernierMois);
     }
 
-    
+    /**
+     * Teste que la fonction majFraisForfait met bien à jour la ligne de frais
+     * forfait pour un visiteur et un mois donné
+     * 
+     * @return null
+     */
+    public function testMajFraisForfaitMetAJourLesFrais()
+    {
+        // Simulation des frais entrés par l'utilisateur
+        $lesFrais = array(
+            'ETP' => '14',
+            'KM' => '121',
+            'NUI' => '7',
+            'REP' => '6'
+        );
+        PdoGsbTest::$_monPdoGsb->majFraisForfait('a131', '202505', $lesFrais);
+
+        /* Requête permettant de selectionner les valeurs qui ont été
+         * insérées.
+         */
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT lignefraisforfait.idfraisforfait AS id, '
+            . 'lignefraisforfait.quantite AS qte '
+            . 'FROM lignefraisforfait '
+            . " WHERE idvisiteur = 'a131' AND mois = '202505'"
+        );
+        $requetePrepare->execute();
+        $lesLignesRetournes = $requetePrepare->fetchAll();
+        $lesFraisRetournes = array();
+        // Création du tableau qui est retourné par la requête
+        foreach ($lesLignesRetournes as $unFrais) {
+            $lesFraisRetournes[] = array(
+                $unFrais['id'] => $unFrais['qte'],
+            );
+        }
+
+        // Tableau attendu qui doit être retourné par la requête précédente
+        $lesFraisAttendus = array(
+            0 => array(
+                'ETP' => '14',
+            ),
+            1 => array(
+                'KM' => '121',
+            ),
+            2 => array(
+                'NUI' => '7',
+            ),
+            3 => array(
+                'REP' => '6'
+            )
+        );
+
+        $this->assertEquals($lesFraisAttendus, $lesFraisRetournes);   
+    }
+
+    /**
+     * Teste que la fonction majNbJustificatifs met bien à jour le nombre de
+     * justificatifs sur une fiche de frais pour un visiteur et un mois donné
+     * 
+     * @return null
+     */
+    public function testMajNbJustificatifsMetAJourLeNbDeJustificatifs()
+    {
+        PdoGsbTest::$_monPdoGsb->majNbJustificatifs('a131', '202505', 20);
+        $lesInfosFicheFrais = PdoGsbTest::$_monPdoGsb->getLesInfosFicheFrais(
+            'a131', 
+            '202505'
+        );
+        // On récupère le nombre de justificatifs du visiteur
+        $nbJustificatifs = $lesInfosFicheFrais['nbJustificatifs'];
+        
+        $this->assertEquals($nbJustificatifs, 20);
+    }
+
+    /**
+     * Teste que la fonction creeNouvellesLignesFrais créée une nouvelle fiche
+     * de frais pour un visiteur et un mois donné
+     * 
+     * @return null
+     */
+    public function testCreeNouvellesLignesFraisRetourneNouvelleFicheFrais()
+    {
+        // Création de la nouvelle fiche de frais
+        PdoGsbTest::$_monPdoGsb->creeNouvellesLignesFrais('a131', '202506');
+
+        // On récupère la nouvelle fiche de frais créée
+        $ficheFraisRetournee = PdoGsbTest::$_monPdoGsb->getLesInfosFicheFrais(
+            'a131', 
+            '202506'
+        );
+
+        /* On créé un tableau contenant le résultat attendu de la fiche de frais 
+         * créée
+         */
+        $ficheFraisAttendue = array(
+            'idEtat' => 'CR',
+            'dateModif' => date("Y-m-d"),
+            'nbJustificatifs' => '0',
+            'montantValide' => '0.00',
+            'libEtat' => 'Fiche créée, saisie en cours',
+        );
+
+        /* On vérifie que la fiche de frais créée est identique à la fiche de frais
+         * attendue dans la variable ficheFraisAttendue
+         */
+        $this->assertEquals($ficheFraisAttendue, $ficheFraisRetournee);
+    }
+
+    /**
+     * Teste que la fonction creeNouvellesLignesFrais met bien à l'état
+     * clôturé (idEtat = 'CL') la fiche de frais du mois précédent
+     * 
+     * @return null
+     */
+    public function testCreeNouvellesLignesFraisEtatFicheFraisPrecedenteCloturee()
+    {
+        /* Récupération de l'état de la fiche de frais qui précède la fiche de 
+         * frais la plus récente
+         */
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT fichefrais.idetat AS idetat '
+            . 'FROM fichefrais '
+            . 'WHERE mois = (SELECT MAX(mois) '
+            .               'FROM fichefrais '
+            .               'WHERE mois <> '
+            .                     '(SELECT MAX(mois) '
+            .                     'FROM fichefrais'
+            .                     ')'
+            .                ')'
+        );
+        $requetePrepare->execute();
+        $laLigne = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+        $idEtatRetourne = $laLigne['idetat'];
+
+        $this->assertEquals('CL', $idEtatRetourne);
+    }
+
+    /**
+     * Teste que la fonction creeNouvellesLignesFrais créée bien des nouvelles
+     * lignes de frais forfait pour le mois et le visiteur concerné
+     * 
+     * @return null
+     */
+    public function testCreeNouvellesLignesFraisNouvellesLigneFraisForfaitCreee()
+    {
+        // Lignes de frais forfaits retournées
+        $fraisForfaitsRetournes = PdoGsbTest::$_monPdoGsb->getLesFraisForfait(
+            'a131', 
+            '202506'
+        );
+
+        // Tableau attendues contenant les lignes de frais forfaits créées
+        $fraisForfaitsAttendues = array(
+            0 => array(
+                'idfrais' => 'ETP',
+                0 => 'ETP',
+                'libelle' => 'Forfait Etape',
+                1 => 'Forfait Etape',
+                'quantite' => '0',
+                2 => '0'
+            ),
+            1 => array(
+                'idfrais' => 'KM',
+                0 => 'KM',
+                'libelle' => 'Frais Kilométrique',
+                1 => 'Frais Kilométrique',
+                'quantite' => '0',
+                2 => '0'
+            ),
+            2 => array(
+                'idfrais' => 'NUI',
+                0 => 'NUI',
+                'libelle' => 'Nuitée Hôtel',
+                1 => 'Nuitée Hôtel',
+                'quantite' => '0',
+                2 => '0'
+            ),
+            3 => array(
+                'idfrais' => 'REP',
+                0 => 'REP',
+                'libelle' => 'Repas Restaurant',
+                1 => 'Repas Restaurant',
+                'quantite' => '0',
+                2 => '0'
+            )
+        );
+
+        $this->assertEquals($fraisForfaitsAttendues, $fraisForfaitsRetournes);
+    }
+
 }
 

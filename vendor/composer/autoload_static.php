@@ -1075,7 +1075,6 @@ class ComposerStaticInit62b91d73eb971ed8cab20e23e07a5092
         'PHP_Token_YIELD' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'PHP_Token_YIELD_FROM' => __DIR__ . '/..' . '/phpunit/php-token-stream/src/Token.php',
         'Parsedown' => __DIR__ . '/..' . '/erusev/parsedown/Parsedown.php',
-        'PdoGsb\\Math' => __DIR__ . '/../..' . '/includes/class.pdogsb.inc.php',
         'PdoGsb\\PdoGsb' => __DIR__ . '/../..' . '/includes/class.pdogsb.inc.php',
         'PharIo\\Manifest\\Application' => __DIR__ . '/..' . '/phar-io/manifest/src/values/Application.php',
         'PharIo\\Manifest\\ApplicationName' => __DIR__ . '/..' . '/phar-io/manifest/src/values/ApplicationName.php',
