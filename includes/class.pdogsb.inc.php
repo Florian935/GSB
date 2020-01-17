@@ -78,12 +78,32 @@ class PdoGsb
      *
      * @return l'unique objet de la classe PdoGsb
      */
-    public static function getPdoGsb()
+    public static function getPdoGsb($typePdo)
     {
         if (PdoGsb::$_monPdoGsb == null) {
-            PdoGsb::$_monPdoGsb = new PdoGsb();
+            if ($typePdo == 'PdoGsb') {
+                PdoGsb::$_monPdoGsb = new PdoGsb();
+            } elseif ($typePdo == 'PdoGsbTest') {
+                PdoGsb::$_monPdoGsb = new PdoGsbTest();
+            }
+            
         }
         return PdoGsb::$_monPdoGsb;
+    }
+
+    /**
+     * Fonction statique qui retourne l'objet PDO de connexion
+     * à la BDD. Si l'objet est vide, on créé une instance de la 
+     * classe par l'appel de la méthode getPdoGsb().
+     *
+     * @return l'unique objet PDO de la classe PdoGsb
+     */
+    public static function getMonPdo() 
+    {
+        if (PdoGsb::$_monPdo == null) {
+            PdoGsb::getPdoGsb();
+        }
+        return PdoGsb::$_monPdo;
     }
 
     /**
