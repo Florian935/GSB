@@ -38,12 +38,6 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
      */
     static function setUpBeforeClass() : void
     {
-        // PdoGsbTest::$_pdoGsbTest = new PDO(
-        //     PdoGsbTest::$_serveur . ';' . PdoGsbTest::$_bdd,
-        //     PdoGsbTest::$_user,
-        //     PdoGsbTest::$_mdp
-        // );
-        // PdoGsbTest::$_pdoGsbTest->query('SET CHARACTER SET utf8');
         PdoGsbTest::$_monPdoGsb = PdoGsb::getPdoGsb('PdoGsbTest');
         PdoGsbTest::$_pdoGsb = PdoGsb::getMonPdo();
 
@@ -94,6 +88,27 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
         $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
             'DELETE FROM lignefraisforfait '
             . "WHERE idvisiteur = 'a131' AND mois IN ('202505', '202506')"
+        );
+        $requetePrepare->execute();
+
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'DELETE FROM lignefraishorsforfait '
+            . "WHERE idvisiteur = 'a131' AND mois ='202505'"
+        );
+        $requetePrepare->execute();
+
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'UPDATE fichefrais '
+            . "SET idetat = 'CL', "
+            . 'idcomptable = null '
+            . "WHERE idvisiteur = 'a131' AND mois ='201909'"
+        );
+        $requetePrepare->execute();
+
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'UPDATE fichefrais '
+            . "SET montant = 3457.98 "
+            . "WHERE idvisiteur = 'a131' AND mois ='201910'"
         );
         $requetePrepare->execute();
 
@@ -564,8 +579,8 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
             '202506'
         );
 
-        // Tableau attendues contenant les lignes de frais forfaits créées
-        $fraisForfaitsAttendues = array(
+        // Tableau attendus contenant les lignes de frais forfaits créées
+        $fraisForfaitsAttendus = array(
             0 => array(
                 'idfrais' => 'ETP',
                 0 => 'ETP',
@@ -600,8 +615,322 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
             )
         );
 
-        $this->assertEquals($fraisForfaitsAttendues, $fraisForfaitsRetournes);
+        $this->assertEquals($fraisForfaitsAttendus, $fraisForfaitsRetournes);
     }
 
+    /**
+     * Teste que la fonction creeNouveauFraisHorsForfait créée bien une nouvelle
+     * ligne de frais hors forfait
+     * 
+     * @return null
+     */
+    public function testCreeNouveauFraisHorsForfaitCreationDuFraisHorsForfait() 
+    {
+        PdoGsbTest::$_monPdoGsb->creeNouveauFraisHorsForfait(
+            'a131', 
+            '202505', 
+            'Avion', 
+            '10/05/2025', 
+            65
+        );
+
+        $fraisHorsForfaitsRetournes = PdoGsbTest::$_monPdoGsb->
+        getLesFraisHorsForfait(
+            'a131', 
+            '202505'
+        );
+
+        // Selection du dernier id du frais hors forfait venant d'être ajouté
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT MAX(id) as dernierId '
+            . 'FROM lignefraishorsforfait '
+            . "WHERE idvisiteur = 'a131' AND mois = '202505'"
+        );
+        $requetePrepare->execute();
+        $idFraisHorsForfait = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+
+        $fraisHorsForfaitsAttendus = array(
+            0 => array(
+                'id' => $idFraisHorsForfait['dernierId'],
+                0 => $idFraisHorsForfait['dernierId'],
+                'idvisiteur' => 'a131',
+                1 => 'a131',
+                'mois' => '202505',
+                2 => '202505',
+                'libelle' => 'Avion',
+                3 => 'Avion',
+                'date' => '10/05/2025',
+                4 => '2025-05-10',
+                'montant' => '65.00',
+                5 => '65.00'
+            ),
+        );
+        $this->assertEquals($fraisHorsForfaitsAttendus, $fraisHorsForfaitsRetournes);
+    }
+
+    /**
+     * Teste que la fonction supprimerFraisHorsForfait supprime bien la
+     * ligne de frais hors forfait
+     * 
+     * @return null
+     */
+    public function testSupprimerFraisHorsForfaitSupprimeLeFraisHorsForfait()
+    {
+        /* Selection du dernier id du frais hors forfait ayant été ajouté dans
+         * le test précédent
+         */        
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT MAX(id) as dernierId '
+            . 'FROM lignefraishorsforfait '
+            . "WHERE idvisiteur = 'a131' AND mois = '202505'"
+        );
+        $requetePrepare->execute();
+        $idFraisHorsForfait = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+        PdoGsbTest::$_monPdoGsb->supprimerFraisHorsForfait(
+            $idFraisHorsForfait['dernierId']
+        );
+
+        /* Récupération de l'id de la ligne de frais hors forfait ajoutée dans le 
+         * test précédent et qui vient d'être supprimé dans ce test. Le résultat 
+         * attendue de la requête doit donc être null.
+         */
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT id '
+            . 'FROM lignefraishorsforfait '
+            . "WHERE id = :unIdFrais"
+        );
+        $requetePrepare->bindParam(
+            ':unIdFrais', 
+            $idFraisHorsForfait['dernierId'], 
+            PDO::PARAM_STR
+        );
+        $requetePrepare->execute();
+        // Retourne un résultat vide
+        $fraisHorsForfaitSupprime = $requetePrepare->fetch();
+
+
+        $this->assertEquals(null, $fraisHorsForfaitSupprime);
+    }
+
+    /**
+     * Teste que la fonction getLesMoisFicheClotureVisiteur retourne bien les
+     * fiches de frais à l'état clôturée pour un visiteur donné
+     * 
+     * @return null
+     */
+    public function testGetLesMoisFicheClotureVisiteurRetourneLesFichesCloturees()
+    {
+        $ficheFraisRetournees = PdoGsbTest::$_monPdoGsb->
+        getLesMoisFicheClotureVisiteur('a131');
+
+        // Résultat attendu
+        $ficheFraisAttendues = array(
+            0 => array(
+                'mois' => '202505',
+                'numAnnee' => '2025',
+                'numMois' => '05'
+            ),
+            1 => array(
+                'mois' => '201912',
+                'numAnnee' => '2019',
+                'numMois' => '12'
+            ),
+            2 => array(
+                'mois' => '201911',
+                'numAnnee' => '2019',
+                'numMois' => '11'
+            ),
+            3 => array(
+                'mois' => '201910',
+                'numAnnee' => '2019',
+                'numMois' => '10'
+            ),
+            4 => array(
+                'mois' => '201909',
+                'numAnnee' => '2019',
+                'numMois' => '09'
+            )
+        );
+
+        $this->assertEquals($ficheFraisAttendues, $ficheFraisRetournees);
+    }
+
+    /**
+     * Teste que la fonction getLesInfosFicheFrais retourne bien les
+     * informations de la fiche de frais pour un visiteur et un
+     * mois donné
+     * 
+     * @return null
+     */
+    public function testGetLesInfosFicheFraisRetourneLesInformations()
+    {
+        $infosFicheFraisRetournees = PdoGsbTest::$_monPdoGsb->getLesInfosFicheFrais(
+            'a131', 
+            '201705'
+        );
+
+        $infosFicheFraisAttendues = array(
+            'idEtat' => 'RB',
+            'dateModif' => '2017-07-01',
+            'nbJustificatifs' => '0',
+            'montantValide' => '4340.88',
+            'libEtat' => 'Remboursée'
+        );
+
+        $this->assertEquals($infosFicheFraisAttendues, $infosFicheFraisRetournees);
+    }
+
+    /**
+     * Teste que la fonction majEtatFicheFrais met bien à jour
+     * l'état d'une fiche en fonction du visiteur, du mois et de 
+     * l'état passés en paramètre
+     * 
+     * @return null
+     */
+    public function testMajEtatFicheFraisMetAJourLetatDeLaFiche()
+    {
+        PdoGsbTest::$_monPdoGsb->majEtatFicheFrais('a131', '202505', 'RB');
+
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT idetat '
+            . 'FROM fichefrais '
+            . "WHERE idvisiteur = 'a131' AND mois = '202505'"
+        );
+        $requetePrepare->execute();
+        $resultatRequete = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+        $idEtatRetourne = $resultatRequete['idetat'];
+
+        $idEtatAttendu = 'RB';
+
+        $this->assertEquals($idEtatAttendu, $idEtatRetourne);
+    }
+
+    /**
+     * Teste que la fonction majFraisHorsForfait met bien à jour
+     * une ligne de frais hors forfait
+     * 
+     * @return null
+     */
+    public function testMajFraisHorsForfaitRetourneLeFraisHorsForfaitMaj()
+    {
+        // Création d'un nouveau frais hors forfait pour le test
+        PdoGsbTest::$_monPdoGsb->creeNouveauFraisHorsForfait(
+            'a131', 
+            '202505', 
+            'Billet de train', 
+            '10/05/2025', 
+            65
+        );
+
+        /* Selection du dernier id du frais hors forfait venant d'être ajouté
+         */        
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT MAX(id) as dernierId '
+            . 'FROM lignefraishorsforfait '
+            . "WHERE idvisiteur = 'a131' AND mois = '202505'"
+        );
+        $requetePrepare->execute();
+        $idFraisHorsForfait = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+        $dernierIdFraisHorsForfait = $idFraisHorsForfait['dernierId'];
+
+        // Mise à jour du frais hors forfait créé en début de test
+        PdoGsbTest::$_monPdoGsb->majFraisHorsForfait(
+            $dernierIdFraisHorsForfait,
+            'a131',
+            '202505',
+            'Conférence',
+            '10/05/2025',
+            70
+        );
+
+        // Récupération des informations de la ligne de frais hors forfait maj
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT * '
+            . 'FROM lignefraishorsforfait '
+            . 'WHERE id = :unIdFrais'
+        );
+        $requetePrepare->bindParam(
+            ':unIdFrais', 
+            $dernierIdFraisHorsForfait,
+            PDO::PARAM_INT
+        );
+        $requetePrepare->execute();
+        $fraisHorsForfaitRetourne = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+
+        $fraisHorsForfaitAttendu = array(
+            'id' => $dernierIdFraisHorsForfait,
+            'idvisiteur' => 'a131',
+            'mois' => '202505',
+            'libelle' => 'Conférence',
+            'date' => '2025-05-10',
+            'montant' => '70.00'
+        );
+
+        $this->assertEquals($fraisHorsForfaitAttendu, $fraisHorsForfaitRetourne);
+    }
+
+    /**
+     * Teste que la fonction validerLaFiche met bien à jour
+     * l'état d'une fiche de frais à l'état 'validée'
+     * 
+     * @return null
+     */
+    public function testValiderLaFicheMajDeLetat()
+    {
+        // Passage de l'état de la fiche à 'validée'
+        PdoGsbTest::$_monPdoGsb->validerLaFiche('a131', 'c001', '201909');
+
+        // Récupération de l'état de la fiche mise à jour
+        $requetePrepare = PdoGsbTest::$_pdoGsb->prepare(
+            'SELECT idetat '
+            . 'FROM fichefrais '
+            . "WHERE idvisiteur = 'a131' AND mois = '201909'"
+        );
+        $requetePrepare->execute();
+        $resultatRequete = $requetePrepare->fetch(PDO::FETCH_ASSOC);
+        $idEtatRetourne = $resultatRequete['idetat'];
+
+        // Résultat attendu de l'idetat de la fiche: 'VA'
+        $idEtatAttendu = 'VA';
+
+        $this->assertEquals($idEtatAttendu, $idEtatRetourne);
+    }
+
+    /**
+     * Teste que la fonction getMontantValideHorsFraisRefuses retourne
+     * le bon montant validé d'une fiche sans compter les frais refusés
+     * 
+     * @return null
+     */
+    public function testGetMontantValideHorsFraisRefusesRetourneLeBonMontant()
+    {
+        $montantValideRetourne = PdoGsbTest::$_monPdoGsb->
+        getMontantValideHorsFraisRefuses('a131', '201910');
+
+        $montantValideAttendu = 4137.24;
+
+        $this->assertEquals($montantValideAttendu, $montantValideRetourne);
+    }
+
+    /**
+     * Teste que la fonction majMontantValide met à jour
+     * le montant validé d'une fiche
+     * 
+     * @return null
+     */
+    public function testMajMontantValideMetAJourLeMontantValide()
+    {
+        PdoGsbTest::$_monPdoGsb->majMontantValide('a131', '201910', 1000);
+
+        $lesInfosFicheFrais = PdoGsbTest::$_monPdoGsb->getLesInfosFicheFrais(
+            'a131', 
+            '201910'
+        );
+        $montantValideMajRetourne = $lesInfosFicheFrais['montantValide'];
+
+        $montantValideMajAttendu = 1000;
+
+        $this->assertEquals($montantValideMajAttendu, $montantValideMajRetourne);
+    }
 }
 
