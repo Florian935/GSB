@@ -71,7 +71,8 @@ function deconnecter()
  * qui ont été selectionné par le comptable.
  * 
  * @param String $idVisiteurSelectionne id du visiteur selectionne
- * @param Date   $mois moisSelectionne selectionné sous la forme aaaamm
+ * @param String $moisSelectionne       moisSelectionne selectionné sous 
+ *                                      la forme aaaamm
  * 
  * @return null
  */
@@ -151,9 +152,11 @@ function estEntierPositif($valeur)
 function estTableauEntiers($tabEntiers)
 {
     $boolReturn = true;
-    foreach ($tabEntiers as $unEntier) {
-        if (!estEntierPositif($unEntier)) {
-            $boolReturn = false;
+    if (isset($tabEntiers)) {
+        foreach ($tabEntiers as $unEntier) {
+            if (!estEntierPositif($unEntier)) {
+                $boolReturn = false;
+            }
         }
     }
     return $boolReturn;

@@ -17,8 +17,11 @@
 <div id="accueil">
     <h2>
         Gestion des frais<small> - 
-        <?php if ($typeUtilisateur == 'visiteur') { ?> Visiteur : 
-        <?php } else { ?> Comptable : <?php } ?>
+        <?php if ($typeUtilisateur == 'visiteur') { 
+            ?> Visiteur : 
+        <?php } else { 
+            ?> Comptable : <?php 
+        } ?>
             <?php 
             echo $_SESSION['prenom'] . ' ' . $_SESSION['nom']
             ?></small>
@@ -26,8 +29,16 @@
 </div>
 <div class="row">
     <div class="col-md-12">
-        <div class="panel panel-primary">
-            <div class="panel-heading">
+        <div <?php if ($typeUtilisateur == 'visiteur') { 
+            ?>class="panel panel-primary" 
+       <?php } else if ($typeUtilisateur == 'comptable') { 
+                    ?>class="panel panel-primary-comptable" <?php 
+   } ?>>
+    <div <?php if ($typeUtilisateur == 'visiteur') { 
+        ?>class="panel-heading" 
+   <?php } else if ($typeUtilisateur == 'comptable') { 
+                ?>class="panel-heading-comptable" <?php 
+   } ?>>
                 <h3 class="panel-title">
                     <span class="glyphicon glyphicon-bookmark"></span>
                     Navigation
@@ -41,18 +52,42 @@
                            class="btn btn-success btn-lg" role="button">
                         <?php } else { ?>
                         <a href="index.php?uc=validerFrais&action=validationFrais"
-                           class="btn btn-success btn-lg" role="button">
+                            <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?>class="btn btn-success btn-lg" <?php 
+                            } else if ($typeUtilisateur == 'comptable') { 
+                                ?>class="btn btn-success-comptable btn-lg" <?php 
+                            } ?> role="button">
                         <?php } ?>
-                            <span class="glyphicon glyphicon-pencil"></span>
+                            <span <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?> 
+                            class="glyphicon glyphicon-list-alt" <?php } else {
+                                        ?> 
+                            class="glyphicon glyphicon-ok" <?php } ?>></span>
                             <br>
-                            <?php if ($typeUtilisateur == 'visiteur') { ?> Renseigner la fiche de frais 
-                            <?php } else { ?> Valider les fiches de frais <?php } ?></a>
+                            <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?> Renseigner la fiche de frais 
+                            <?php } else { 
+                                ?> Valider les fiches de frais <?php 
+                            } ?></a>
+                        <?php if ($typeUtilisateur == 'visiteur') { ?>
                         <a href="index.php?uc=etatFrais&action=selectionnerMois"
                            class="btn btn-primary btn-lg" role="button">
-                            <span class="glyphicon glyphicon-list-alt"></span>
+                        <?php } else { ?>
+                        <a href="index.php?uc=suivreFrais"
+                            class="btn btn-primary-comptable btn-lg" role="button">
+                        <?php } ?>
+                            <span <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?> 
+                            class="glyphicon glyphicon-list-alt" <?php } else { 
+                                        ?> 
+                            class="glyphicon glyphicon-euro" <?php } ?>></span>
                             <br>
-                            <?php if ($typeUtilisateur == 'visiteur') { ?> Afficher mes fiches de frais
-                            <?php } else { ?> Suivre le paiement des fiches de frais <?php } ?></a>
+                            <?php if ($typeUtilisateur == 'visiteur') { 
+                                ?> Afficher mes fiches de frais
+                            <?php } else { 
+                                ?> Suivre le paiement des fiches de frais <?php 
+                            } 
+                            ?></a>
                             
                     </div>
                 </div>

@@ -27,6 +27,13 @@ if ($typeUtilisateur == 'comptable') {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur($idVisiteur);
 }
 
+if ($typeUtilisateur == 'comptable') {
+    $nbJustificatifsDeBase = $pdo->getNbjustificatifs(
+        $_SESSION['idVisiteurSelectionne'], 
+        $_SESSION['moisSelectionne']
+    );
+}
+
 $lesVisiteurs = $pdo->getLesVisiteurs();
 $lesMois = $pdo->getTousLesMois();
 require 'vues/v_listeVisiteur.php';
@@ -52,12 +59,11 @@ case 'validerMajFraisForfait':
         } else {
             $pdo->majFraisForfait($idVisiteur, $mois, $lesFrais);
         }
-        
+        $estMajFraisForfait = true;
     } else {
         ajouterErreur('Les valeurs des frais doivent être numériques');
         include 'vues/v_erreurs.php';
     }
-    $estMajFraisForfait = true;
     break;
 case 'validerCreationFrais':
     $dateFrais = filter_input(INPUT_POST, 'dateFrais', FILTER_SANITIZE_STRING);

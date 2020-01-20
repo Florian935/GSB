@@ -14,7 +14,6 @@
  * @link      http://www.reseaucerta.org Contexte « Laboratoire GSB »
  */
 
-
 $ficheExistante = false;
 $estFicheValidee = false;
 $idComptable = $_SESSION['idUtilisateur'];
@@ -47,12 +46,23 @@ if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
     
     setIdVisiteurEtMoisSelectionnes($idVisiteurSelectionne, $moisFicheSelectionne);
 } 
-if (isset($_SESSION['idVisiteurSelectionne']) && isset($_SESSION['moisSelectionne'])) {
+if (isset($_SESSION['idVisiteurSelectionne']) 
+    && isset($_SESSION['moisSelectionne'])
+) {
     $idVisiteurSelectionne = $_SESSION['idVisiteurSelectionne'];
     $moisFicheSelectionne = $_SESSION['moisSelectionne'];
+    $nbJustificatifsDeBase = $pdo->getNbjustificatifs(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
 }
 
-$lesMois = $pdo->getTousLesMois();
+if (isset($_SESSION['idVisiteurSelectionne'])) {
+    $lesMois = $pdo->getLesMoisFicheClotureVisiteur($idVisiteurSelectionne);
+} else {
+    $lesMois = $pdo->getTousLesMois();
+}
+
 $lesVisiteurs = $pdo->getLesVisiteurs();
 
 // On récupère l'id du frais hors forfait à corriger, reporter ou refuser
@@ -188,6 +198,10 @@ case 'validerNbJustificatifs':
     );
     $estMajFraisHorsForfait = true;
     $ficheExistante = true;
+    $nbJustificatifsDeBase = $pdo->getNbjustificatifs(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
     break;
 case 'validerFiche':
     $pdo->validerLaFiche(
@@ -208,12 +222,20 @@ case 'validerFiche':
     break;
 }
 
+if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
+    $lesInfosFicheFrais = $pdo->getLesInfosFicheFrais(
+        $idVisiteurSelectionne, 
+        $moisFicheSelectionne
+    );
+    $libEtat = $lesInfosFicheFrais['idEtat'];
+}
+
 /*
-* Si la fiche selectionnée pour le visiteur en question existe, on
-* génère les frais forfaitaires et hors forfaitaires du visiteur
-* selectionné et pour la fiche selectionnée
+* Si la fiche selectionnée pour le visiteur en question existe et qu'elle 
+* n'a pas encore été validée, on génère les frais forfaitaires et hors 
+* forfaitaires du visiteur selectionné et pour la fiche selectionnée
 */
-if ($ficheExistante) {
+if ($ficheExistante && !$estFicheValidee && $libEtat == 'CL') {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
         $idVisiteurSelectionne
     );
@@ -227,7 +249,19 @@ if ($ficheExistante) {
     );
     include 'vues/v_listeFraisForfait.php';
     include 'vues/v_listeFraisHorsForfait.php';
-} 
+} elseif ($ficheExistante && !$estFicheValidee && $libEtat == 'CR') {
+    ajouterErreur(
+        'Cette fiche pour ce visiteur est en cours de saisie, il n\'est donc pas 
+        encore possible de la valider., veuillez en choisir une autre.'
+    );
+    include 'vues/v_erreurs.php';
+} elseif ($ficheExistante && !$estFicheValidee && $libEtat != 'CL') {
+    ajouterErreur(
+        'Cette fiche pour ce visiteur a déjà été validée, veuillez en 
+        choisir une autre.'
+    );
+    include 'vues/v_erreurs.php';
+}
 if ($estFicheValidee) {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
         $idVisiteurSelectionne

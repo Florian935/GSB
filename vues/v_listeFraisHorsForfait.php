@@ -36,7 +36,7 @@
             <tbody>
             <?php
             foreach ($lesFraisHorsForfait as $unFraisHorsForfait) {
-                $libelle = htmlspecialchars($unFraisHorsForfait['libelle']);
+                $libelle = $unFraisHorsForfait['libelle'];
                 $date = htmlspecialchars($unFraisHorsForfait['date']);
                 $montant = htmlspecialchars($unFraisHorsForfait['montant']);
                 $idFraisHorsForfait = htmlspecialchars(
@@ -129,7 +129,7 @@
         </form>
     </div>
 </div>
-<?php 
+    <?php 
 } if ($typeUtilisateur == 'comptable') { ?>
     <form action="index.php?uc=validerFrais&action=validerNbJustificatifs" 
           method="post" role="form" class="form-justificatif">
@@ -138,7 +138,7 @@
             <input type="text" id="nb-justificatif" 
                 name="nbJustificatif"
                 size="10" maxlength="5" 
-                value="0" 
+                value="<?php echo $nbJustificatifsDeBase?>" 
                 class="form-control">
             <button class="btn btn-success" type="submit">Valider les justificatifs</button>
         </div>
