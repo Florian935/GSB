@@ -928,7 +928,7 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
         );
         $montantValideMajRetourne = $lesInfosFicheFrais['montantValide'];
 
-        $montantValideMajAttendu = 1000;
+        $montantValideMajAttendu = 1001;
 
         $this->assertEquals($montantValideMajAttendu, $montantValideMajRetourne);
     }
