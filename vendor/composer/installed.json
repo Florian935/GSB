@@ -152,7 +152,8 @@
             "MIT"
         ],
         "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
-        "homepage": "https://github.com/container-interop/container-interop"
+        "homepage": "https://github.com/container-interop/container-interop",
+        "abandoned": "psr/container"
     },
     {
         "name": "doctrine/annotations",
@@ -1232,12 +1233,12 @@
         "version_normalized": "2.9.0.0",
         "source": {
             "type": "git",
-            "url": "https://github.com/phpDocumentor/phpDocumentor2.git",
+            "url": "https://github.com/phpDocumentor/phpDocumentor.git",
             "reference": "be607da0eef9b9249c43c5b4820d25d631c73667"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/phpDocumentor/phpDocumentor2/zipball/be607da0eef9b9249c43c5b4820d25d631c73667",
+            "url": "https://api.github.com/repos/phpDocumentor/phpDocumentor/zipball/be607da0eef9b9249c43c5b4820d25d631c73667",
             "reference": "be607da0eef9b9249c43c5b4820d25d631c73667",
             "shasum": ""
         },
@@ -3727,7 +3728,8 @@
             "psr-16",
             "psr-6",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-cache"
     },
     {
         "name": "zendframework/zend-config",
@@ -3785,7 +3787,8 @@
         "keywords": [
             "config",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-config"
     },
     {
         "name": "zendframework/zend-eventmanager",
@@ -3841,7 +3844,8 @@
             "eventmanager",
             "events",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-eventmanager"
     },
     {
         "name": "zendframework/zend-filter",
@@ -3908,7 +3912,8 @@
             "ZendFramework",
             "filter",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-filter"
     },
     {
         "name": "zendframework/zend-hydrator",
@@ -3968,7 +3973,8 @@
         "keywords": [
             "hydrator",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-hydrator"
     },
     {
         "name": "zendframework/zend-i18n",
@@ -4038,7 +4044,8 @@
             "ZendFramework",
             "i18n",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-i18n"
     },
     {
         "name": "zendframework/zend-json",
@@ -4090,7 +4097,8 @@
             "ZendFramework",
             "json",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-json"
     },
     {
         "name": "zendframework/zend-serializer",
@@ -4149,7 +4157,8 @@
             "ZendFramework",
             "serializer",
             "zf"
-        ]
+        ],
+        "abandoned": "laminas/laminas-serializer"
     },
     {
         "name": "zendframework/zend-servicemanager",
@@ -4203,7 +4212,8 @@
         "keywords": [
             "servicemanager",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-servicemanager"
     },
     {
         "name": "zendframework/zend-stdlib",
@@ -4264,7 +4274,8 @@
         "keywords": [
             "stdlib",
             "zf2"
-        ]
+        ],
+        "abandoned": "laminas/laminas-stdlib"
     },
     {
         "name": "zetacomponents/base",
