@@ -545,7 +545,7 @@ class PdoGsb
     }
 
     /**
-     * Retourne les mois pour lesquel un visiteur a une fiche de frais
+     * Retourne les mois pour lesquels un visiteur a une fiche de frais
      *
      * @param String $idVisiteur ID du visiteur
      *
