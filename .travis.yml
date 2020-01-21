@@ -9,4 +9,5 @@ before_script:
 
 script:
   - composer install
+  - chmod +x vendor/phpunit/phpunit/phpunit
   - vendor/bin/phpunit
