@@ -1,8 +1,6 @@
 language: php
 
 php:
-  - '7.0'
-  - '7.1'
   - '7.2'
 
 before_script:
@@ -10,5 +8,6 @@ before_script:
 
 script:
   - composer install
+  - composer dump-autoload -o
   - chmod +x vendor/phpunit/phpunit/phpunit
   - vendor/bin/phpunit
