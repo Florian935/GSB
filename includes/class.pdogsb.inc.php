@@ -45,6 +45,7 @@ class PdoGsb
     private static $_serveur = 'mysql:host=127.0.0.1';
     private static $_bdd = 'dbname=id11601272_appligsb';
     private static $_bddTest = 'dbname=id11601272_appligsb_test';
+    private static $_bddAndroid = 'dbname=androidgsb_test';
     private static $_user = 'id11601272_usergsb';
     private static $_mdp = 'PPEappliBDD97531';
     private static $_monPdo;
@@ -65,6 +66,12 @@ class PdoGsb
         } elseif ($typePdo == 'PdoGsbTest') {
             PdoGsb::$_monPdo = new PDO(
                 PdoGsb::$_serveur . ';' . PdoGsb::$_bddTest,
+                PdoGsb::$_user,
+                PdoGsb::$_mdp
+            );
+        } elseif ($typePdo == 'PdoGsbAndroid') {
+            PdoGsb::$_monPdo = new PDO(
+                PdoGsb::$_serveur . ';' . PdoGsb::$_bddAndroid,
                 PdoGsb::$_user,
                 PdoGsb::$_mdp
             );
@@ -94,6 +101,8 @@ class PdoGsb
                 PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsb');
             } elseif ($typePdo == 'PdoGsbTest') {
                 PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsbTest');
+            } elseif ($typePdo == 'PdoGsbAndroid') {
+                PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsbAndroid');
             }
             
         }
@@ -107,10 +116,10 @@ class PdoGsb
      *
      * @return l'unique objet PDO de la classe PdoGsb
      */
-    public static function getMonPdo() 
+    public static function getMonPdo($typePdo) 
     {
         if (PdoGsb::$_monPdo == null) {
-            PdoGsb::getPdoGsb();
+            PdoGsb::getPdoGsb($typePdo);
         }
         return PdoGsb::$_monPdo;
     }
@@ -260,7 +269,7 @@ class PdoGsb
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
-        $lesLignes = $requetePrepare->fetchAll();
+        $lesLignes = $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
         for ($i = 0; $i < count($lesLignes); $i++) {
             $date = $lesLignes[$i]['date'];
             $lesLignes[$i]['date'] = dateAnglaisVersFrancais($date);
@@ -316,7 +325,7 @@ class PdoGsb
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetchAll();
+        return $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -331,7 +340,7 @@ class PdoGsb
             . 'FROM fraisforfait ORDER BY fraisforfait.id'
         );
         $requetePrepare->execute();
-        return $requetePrepare->fetchAll();
+        return $requetePrepare->fetchAll(PDO::FETCH_ASSOC);;
     }
 
     /**
