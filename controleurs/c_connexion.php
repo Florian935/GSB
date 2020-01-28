@@ -28,6 +28,10 @@ case 'valideConnexion':
     $mdp = filter_input(INPUT_POST, 'mdp', FILTER_SANITIZE_STRING);
     $visiteur = $pdo->getInfosVisiteur($login, $mdp);
     $comptable = $pdo->getInfosComptable($login, $mdp);
+    /** Si l'utilisateur qui se connecte est un visiteur, on valorise les 
+     * variable de session pour un visiteur, sinon on valorise pour un 
+     * comptable. Si l'authentification échoue, on affiche un message d'erreur.
+     */
     if (is_array($visiteur)) {
         $id = $visiteur['id'];
         $nom = $visiteur['nom'];
