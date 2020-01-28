@@ -26,6 +26,16 @@ class FctIncTest extends PHPUnit\Framework\TestCase
 {
 
     /**
+     * Méthode appelée par phpUnit avant l'execution de chaque tests définis
+     * 
+     * @return void
+     */
+    function setUp() : void 
+    {
+        $_REQUEST['erreurs'] = null;
+    }
+
+    /**
      * Teste que la fonction typeUtilisateur retourne le type de 
      * l'utilisateur stockée la variable de session typeUtilisateur
      * 
@@ -197,5 +207,162 @@ class FctIncTest extends PHPUnit\Framework\TestCase
         $this->assertEquals(false, $nonTabEntiers_Negatif);
         $this->assertEquals(false, $nonTabEntiers_Decimal);
         $this->assertEquals(false, $nonTabEntiers_NegatifEtDecimal);
+    }
+
+    /**
+     * Test que la fonction estDateDepassee retourne false si la date passée
+     * en paramètre ne dépasse pas d'un an par rapport à la date actuelle
+     * et true si elle dépasse de plus d'un an
+     * 
+     * @return null
+     */
+    public function testEstDateDepasseeRetourneFalseMoinsUnAn()
+    {
+        $dateActuelle = date('d/m/Y');
+        @list($jour, $mois, $annee) = explode('/', $dateActuelle);
+        $annee--;
+        $anPasse = $annee . $mois . $jour;
+        $dateNonDepassee = estDateDepassee($anPasse);
+        $dateDepassee = estDateDepassee('01/01/2000');
+
+        $this->assertEquals(false, $dateNonDepassee);
+        $this->assertEquals(true, $dateDepassee);
+    }
+
+    /**
+     * Teste que la fonction estDateValide retourne true si la
+     * date passée en paramètre est sous la forme jj/mm/aaaa et
+     * false dans le cas contraire
+     * 
+     * @return null
+     */
+    public function testEstDateValideRetourneTrueBonFormat()
+    {
+        $estBonFormat = estDateValide('01/01/2020');
+        $mauvaisFormat_1 = estDateValide('2020-01-01');
+        $mauvaisFormat_2 = estDateValide('01012020');
+        $mauvaisFormat_3 = estDateValide('012020');
+
+        $this->assertEquals(true, $estBonFormat);
+        $this->assertEquals(false, $mauvaisFormat_1);
+        $this->assertEquals(false, $mauvaisFormat_2);
+        $this->assertEquals(false, $mauvaisFormat_3);
+    }
+
+    /**
+     * Teste que la fonction lesQteFraisValides retourne vrai
+     * si les quantités des frais reçus sont des entiers et 
+     * false dans le cas contraire
+     * 
+     * @return null
+     */
+    public function testLesQteFraisValidesRetourneTrueQtesValides()
+    {
+        $lesFraisValides = array(
+            'NUI' => 3,
+            'ETP' => 6,
+            'KM' => 125,
+            'REP' => 10,
+        );
+
+        $lesFraisNonValides = array(
+            'NUI' => -3,
+            'ETP' => 6,
+            'KM' => 125.3,
+            'REP' => 10,
+        );
+
+        $estQteValides = lesQteFraisValides($lesFraisValides);
+        $nonQteValides = lesQteFraisValides($lesFraisNonValides);
+
+        $this->assertEquals(true, $estQteValides);
+        $this->assertEquals(false, $nonQteValides);
+    }
+
+    /**
+     * Teste que la fonction valideInfosFrais vérifie bien
+     * la validité du libellé, de la date et du montant du
+     * frais reçu et si ce n'est pas valide, ajoute un message
+     * d'erreur dans la variable de session 'erreurs'
+     * 
+     * @return null
+     */
+    public function testValideInfosFraisVerificationOk()
+    {
+        valideInfosFrais('2020-01-01', 'Billet de train', 100);
+        valideInfosFrais('01/01/2016', 'Billet de train', 100);
+        valideInfosFrais('', 'Billet de train', 100);
+        valideInfosFrais(date('d/m/Y'), '', 100);
+        valideInfosFrais(date('d/m/Y'), 'Billet de train', '');
+        valideInfosFrais(date('d/m/Y'), 'Billet de train', 'Montant');
+        valideInfosFrais('', '', '');
+
+        /* Teste pour chaque cas respesctivement dans l'ordre d'appel
+         * de la fonction valideInfosFrais que les messages d'erreurs sont 
+         * bien ajoutés au fur et à mesure dans la variable de session 'erreurs'
+         */
+        $this->assertEquals('Date invalide', $_REQUEST['erreurs'][0]);
+        $this->assertEquals(
+            "date d'enregistrement du frais dépassé, plus de 1 an", 
+            $_REQUEST['erreurs'][1]
+        );
+        $this->assertEquals(
+            'Le champ date ne doit pas être vide', 
+            $_REQUEST['erreurs'][2]
+        );
+        $this->assertEquals(
+            'Le champ description ne peut pas être vide', 
+            $_REQUEST['erreurs'][3]
+        );
+        $this->assertEquals(
+            'Le champ montant ne peut pas être vide', 
+            $_REQUEST['erreurs'][4]
+        );
+        $this->assertEquals(
+            'Le champ montant doit être numérique', 
+            $_REQUEST['erreurs'][5]
+        );
+        $this->assertEquals(
+            'Le champ date ne doit pas être vide'
+            . 'Le champ description ne peut pas être vide'
+            . 'Le champ montant ne peut pas être vide', 
+            $_REQUEST['erreurs'][6]
+            . $_REQUEST['erreurs'][7]
+            . $_REQUEST['erreurs'][8]
+        );
+    }
+
+    /**
+     * Teste que la fonction ajouterErreur ajoute bien le message
+     * reçu en paramètre dans le tableau des erreurs
+     * 
+     * @return null
+     */
+    public function testAjouterErreurAjoutOk()
+    {
+        ajouterErreur('Libelle incorrect');
+        ajouterErreur('Montant incorrect');
+
+        $this->assertEquals('Libelle incorrect', $_REQUEST['erreurs'][0]);
+        $this->assertEquals('Montant incorrect', $_REQUEST['erreurs'][1]);
+    }
+
+    /**
+     * Teste que la fonction nbErreurs retourne le bon nombre 
+     * de lignes du tableau des erreurs
+     * 
+     * @return null
+     */
+    public function testNbErreursRetourneLeBonNombre()
+    {
+        $_REQUEST['erreurs'] = [
+            'Libelle incorrect', 
+            'Montant incorrect', 
+            'Date incorrecte'
+        ];
+
+        $nbErreurs = nbErreurs();
+
+        $this->assertEquals(3, $nbErreurs);
     }
 }

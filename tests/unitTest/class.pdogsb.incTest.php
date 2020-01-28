@@ -63,15 +63,6 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
     }
 
     /**
-     * Méthode appelée par phpUnit avant l'execution de chaque tests définis
-     * 
-     * @return void
-     */
-    function setUp() : void 
-    {
-    }
-
-    /**
      * Traitements effectués lorsque tous les tests sont 
      * terminés.
      * Ces traitements sont nécessaires afin de retrouver la 
