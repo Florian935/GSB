@@ -49,6 +49,11 @@ case 'validerMajFraisForfait':
         FILTER_DEFAULT, 
         FILTER_FORCE_ARRAY
     );
+    /** Si les quantités récupérées sont valides, alors on met
+     * à jour le frais forfait. Dans le cas ou c'est un comptable
+     * qui a corrigé les frais, il faut mettre à jour les frais
+     * sur la fiche du visiteur selectionné.
+     */
     if (lesQteFraisValides($lesFrais)) {
         if ($typeUtilisateur == 'comptable') {
             $pdo->majFraisForfait(

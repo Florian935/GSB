@@ -161,7 +161,7 @@ case 'modification':
             /* Si le frais est à reporter, on doit vérifier que la fiche
             * dans laquelle on reporte le frais est bien créée. Si ce n'est
             * pas le cas, on la créée puis on reporte le frais. On supprime également
-             le frais de la fiche actuelle.
+            * le frais de la fiche actuelle.
             */
         } elseif ($traitementAEffectuer == 'reporter') {
             $mois = getMois(date('d/m/Y'));
@@ -233,7 +233,9 @@ if (isset($idVisiteurSelectionne) && isset($moisFicheSelectionne)) {
 /*
 * Si la fiche selectionnée pour le visiteur en question existe et qu'elle 
 * n'a pas encore été validée, on génère les frais forfaitaires et hors 
-* forfaitaires du visiteur selectionné et pour la fiche selectionnée
+* forfaitaires du visiteur selectionné et pour la fiche selectionnée. Sinon
+* si la fiche a déjà été validée, remboursée ou est en cours de création, le
+* comptable ne doit pas y avoir accès dans l'onglet de validation des fiches.
 */
 if ($ficheExistante && !$estFicheValidee && $libEtat == 'CL') {
     $nomEtPrenomVisiteur = $pdo->getNomEtPrenomVisiteur(
