@@ -29,7 +29,7 @@ function typeUtilisateur()
 }
 
 /**
- * Teste si un quelconque visiteur est connecté
+ * Teste si un quelconque utilisateur est connecté
  *
  * @return vrai ou faux
  */
@@ -128,7 +128,9 @@ function getMois($date)
     return $annee . $mois;
 }
 
-/* gestion des erreurs */
+
+
+/* ------------ gestion des erreurs ------------ */
 
 /**
  * Indique si une valeur est un entier positif ou nul
