@@ -45,7 +45,6 @@ class PdoGsb
     private static $_serveur = 'mysql:host=127.0.0.1';
     private static $_bdd = 'dbname=id11601272_appligsb';
     private static $_bddTest = 'dbname=id11601272_appligsb_test';
-    private static $_bddAndroid = 'dbname=androidgsb_test';
     private static $_user = 'id11601272_usergsb';
     private static $_mdp = 'PPEappliBDD97531';
     private static $_monPdo;
@@ -66,12 +65,6 @@ class PdoGsb
         } elseif ($typePdo == 'PdoGsbTest') {
             PdoGsb::$_monPdo = new PDO(
                 PdoGsb::$_serveur . ';' . PdoGsb::$_bddTest,
-                PdoGsb::$_user,
-                PdoGsb::$_mdp
-            );
-        } elseif ($typePdo == 'PdoGsbAndroid') {
-            PdoGsb::$_monPdo = new PDO(
-                PdoGsb::$_serveur . ';' . PdoGsb::$_bddAndroid,
                 PdoGsb::$_user,
                 PdoGsb::$_mdp
             );
@@ -101,8 +94,6 @@ class PdoGsb
                 PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsb');
             } elseif ($typePdo == 'PdoGsbTest') {
                 PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsbTest');
-            } elseif ($typePdo == 'PdoGsbAndroid') {
-                PdoGsb::$_monPdoGsb = new PdoGsb('PdoGsbAndroid');
             }
             
         }

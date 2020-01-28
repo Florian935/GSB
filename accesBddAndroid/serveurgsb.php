@@ -17,7 +17,7 @@
 include "../includes/class.pdogsb.inc.php";
 use PdoGsb\PdoGsb;
 
-$pdo = PdoGsb::getPdoGsb('PdoGsbAndroid');
+$pdo = PdoGsb::getPdoGsb('PdoGsb');
 
 // contrôle de réception de paramètre
 if (isset($_POST["operation"])) {
@@ -37,7 +37,7 @@ if (isset($_POST["operation"])) {
             $laRequete.= $login ."' AND mdp ='" . $mdp . "'";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             // Si la requête a réussi, on retourne les informations
@@ -64,7 +64,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= $idVisiteur . "' AND mois = '" . $mois . "'";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             $ligne = $req->fetchAll();
@@ -89,7 +89,7 @@ if (isset($_POST["operation"])) {
             $laRequete.= $idvisiteur . "' AND mois = '" . $mois . "'";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             $ligne = $req->fetchAll(PDO::FETCH_ASSOC);
@@ -128,7 +128,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= $idVisiteur . "' AND idfraisforfait = '" . $idFrais . "'";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             print(json_encode($laRequete));
@@ -163,7 +163,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= "', '".$date. "', ".$montant.")";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
 
@@ -178,7 +178,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= " FROM lignefraishorsforfait)";
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             $ligne = $req->fetch(PDO::FETCH_ASSOC);
@@ -202,7 +202,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= "WHERE id = " . $idFraisHF;
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
             $ligne = $req->fetch(PDO::FETCH_ASSOC);
@@ -213,7 +213,7 @@ if (isset($_POST["operation"])) {
             $laRequete .= "WHERE id = " . $idFraisHF;
 
             // Execution et envoi de la requête
-            $cnx = PdoGsb::getMonPdo('PdoGsbAndroid');
+            $cnx = PdoGsb::getMonPdo('PdoGsb');
             $req = $cnx->prepare($laRequete);
             $req->execute();
 
