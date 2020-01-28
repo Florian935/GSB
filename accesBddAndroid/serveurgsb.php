@@ -1,4 +1,7 @@
 <?php
+
+header('Content-Type: application/json; charset=utf-8');
+
 /**
  * Script php permettant à l'application Android d'accéder
  * à la BDD de l'application GSB.
