@@ -96,13 +96,11 @@ if (isset($_POST["operation"])) {
             $req = $cnx->prepare($laRequete);
             $req->execute();
             $ligne = $req->fetchAll(PDO::FETCH_ASSOC);
-            // Encodage des accents
-            for ($i=0; $i<sizeof($ligne); $i++) {
-                mb_detect_encoding($ligne[$i]['libelle'], "UTF-8") != "UTF-8" ? : $ligne[$i]['libelle'] 
-                    = utf8_encode($ligne[$i]['libelle']);
-            };
 
-            print(json_encode($ligne, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES));
+            print(json_encode(
+                $ligne, 
+                JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES
+            ));
 
         }catch(PDOException $e){
             print "Erreur !%".$e->getMessage();
@@ -150,8 +148,7 @@ if (isset($_POST["operation"])) {
             $donnee = json_decode($lesdonnees);
             $idVisiteur = $donnee[0];
             $mois = $donnee[1];
-            // On décode le libellé pour récuperer les caractères spéciaux
-            $libelle = utf8_decode($donnee[2]);
+            $libelle = $donnee[2];
             $date = $donnee[3];
             $montant = $donnee[4];
 
