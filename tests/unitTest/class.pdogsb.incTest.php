@@ -39,7 +39,7 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
     static function setUpBeforeClass() : void
     {
         PdoGsbTest::$_monPdoGsb = PdoGsb::getPdoGsb('PdoGsbTest');
-        PdoGsbTest::$_pdoGsb = PdoGsb::getMonPdo();
+        PdoGsbTest::$_pdoGsb = PdoGsb::getMonPdo('PdoGsbTest');
 
 
         /* Initialisation de toutes les requêtes d'insertion et de suppression
@@ -299,7 +299,7 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
             . "WHERE idvisiteur = 'a17' AND mois = '201703'"
         );
         $requetePrepare->execute();
-        $tousLesFraisHorsForfait = $requetePrepare->fetchAll();
+        $tousLesFraisHorsForfait = $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
         /* Conversion des dates anglaises en dates française pour permettre
          * la comparaison
          */
@@ -341,7 +341,7 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
             . 'ORDER BY lignefraisforfait.idfraisforfait'
         );
         $requetePrepare->execute();
-        $tousLesFraisForfait = $requetePrepare->fetchAll();
+        $tousLesFraisForfait = $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
         /* Comparaison des 2 arrays qui doivent contenir tous les deux 
          * l'ensemble des frais hors forfait pour le visiteur et le mois fourni
          */
@@ -574,35 +574,23 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
         $fraisForfaitsAttendus = array(
             0 => array(
                 'idfrais' => 'ETP',
-                0 => 'ETP',
                 'libelle' => 'Forfait Etape',
-                1 => 'Forfait Etape',
                 'quantite' => '0',
-                2 => '0'
             ),
             1 => array(
                 'idfrais' => 'KM',
-                0 => 'KM',
                 'libelle' => 'Frais Kilométrique',
-                1 => 'Frais Kilométrique',
                 'quantite' => '0',
-                2 => '0'
             ),
             2 => array(
                 'idfrais' => 'NUI',
-                0 => 'NUI',
                 'libelle' => 'Nuitée Hôtel',
-                1 => 'Nuitée Hôtel',
                 'quantite' => '0',
-                2 => '0'
             ),
             3 => array(
                 'idfrais' => 'REP',
-                0 => 'REP',
                 'libelle' => 'Repas Restaurant',
-                1 => 'Repas Restaurant',
                 'quantite' => '0',
-                2 => '0'
             )
         );
 
@@ -643,17 +631,11 @@ class PdoGsbTest extends PHPUnit\Framework\TestCase
         $fraisHorsForfaitsAttendus = array(
             0 => array(
                 'id' => $idFraisHorsForfait['dernierId'],
-                0 => $idFraisHorsForfait['dernierId'],
                 'idvisiteur' => 'a131',
-                1 => 'a131',
                 'mois' => '202505',
-                2 => '202505',
                 'libelle' => 'Avion',
-                3 => 'Avion',
                 'date' => '10/05/2025',
-                4 => '2025-05-10',
                 'montant' => '65.00',
-                5 => '65.00'
             ),
         );
         $this->assertEquals($fraisHorsForfaitsAttendus, $fraisHorsForfaitsRetournes);

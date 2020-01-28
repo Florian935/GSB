@@ -107,10 +107,10 @@ class PdoGsb
      *
      * @return l'unique objet PDO de la classe PdoGsb
      */
-    public static function getMonPdo() 
+    public static function getMonPdo($typePdo) 
     {
         if (PdoGsb::$_monPdo == null) {
-            PdoGsb::getPdoGsb();
+            PdoGsb::getPdoGsb($typePdo);
         }
         return PdoGsb::$_monPdo;
     }
@@ -260,7 +260,7 @@ class PdoGsb
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
-        $lesLignes = $requetePrepare->fetchAll();
+        $lesLignes = $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
         for ($i = 0; $i < count($lesLignes); $i++) {
             $date = $lesLignes[$i]['date'];
             $lesLignes[$i]['date'] = dateAnglaisVersFrancais($date);
@@ -316,7 +316,7 @@ class PdoGsb
         $requetePrepare->bindParam(':unIdVisiteur', $idVisiteur, PDO::PARAM_STR);
         $requetePrepare->bindParam(':unMois', $mois, PDO::PARAM_STR);
         $requetePrepare->execute();
-        return $requetePrepare->fetchAll();
+        return $requetePrepare->fetchAll(PDO::FETCH_ASSOC);
     }
 
     /**
@@ -331,7 +331,7 @@ class PdoGsb
             . 'FROM fraisforfait ORDER BY fraisforfait.id'
         );
         $requetePrepare->execute();
-        return $requetePrepare->fetchAll();
+        return $requetePrepare->fetchAll(PDO::FETCH_ASSOC);;
     }
 
     /**
