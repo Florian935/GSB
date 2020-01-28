@@ -42,7 +42,7 @@ use PDO;
 
 class PdoGsb
 {
-    private static $_serveur = 'mysql:host=127.0.0.1';
+    private static $_serveur = 'mysql:host=localhost';
     private static $_bdd = 'dbname=id11601272_appligsb';
     private static $_bddTest = 'dbname=id11601272_appligsb_test';
     private static $_user = 'id11601272_usergsb';
