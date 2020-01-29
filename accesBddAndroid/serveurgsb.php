@@ -97,7 +97,7 @@ if (isset($_POST["operation"])) {
 
             // Préparation de la requête
             $laRequete = "SELECT * FROM lignefraishorsforfait WHERE idvisiteur ='";
-            $laRequete.= $idvisiteur . "' AND mois = '" . $mois . "'";
+            $laRequete.= $idVisiteur . "' AND mois = '" . $mois . "'";
 
             // Execution et envoi de la requête
             $cnx = PdoGsb::getMonPdo('PdoGsb');
