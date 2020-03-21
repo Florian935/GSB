@@ -61,7 +61,7 @@ if (isset($_POST["operation"])) {
             $donnee = json_decode($lesdonnees);
             $idVisiteur = $donnee[0];
             $mois = $donnee[1];
-
+            
             if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
                 $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
             };
@@ -90,7 +90,7 @@ if (isset($_POST["operation"])) {
             $donnee = json_decode($lesdonnees);
             $idVisiteur = $donnee[0];
             $mois = $donnee[1];
-
+            
             if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
                 $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
             };
@@ -126,6 +126,11 @@ if (isset($_POST["operation"])) {
             $idFrais = $donnee[2];
             $quantite = $donnee[3];
 
+            if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
+                $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
+            };
+
+
             // Préparation de la requête
             $laRequete = "UPDATE lignefraisforfait SET quantite =" .$quantite; 
             $laRequete .= " WHERE mois = '" . $mois . "' AND idvisiteur = '" ;
@@ -154,6 +159,10 @@ if (isset($_POST["operation"])) {
             $libelle = $donnee[2];
             $date = $donnee[3];
             $montant = $donnee[4];
+
+            if ($pdo->estPremierFraisMois($idVisiteur, $mois)) {
+                $pdo->creeNouvellesLignesFrais($idVisiteur, $mois);
+            };
 
             // Préparation de la requête
             $laRequete = "INSERT INTO lignefraishorsforfait (idvisiteur, ";
